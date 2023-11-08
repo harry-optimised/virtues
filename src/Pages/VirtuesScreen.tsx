@@ -211,6 +211,9 @@ const VirtuesScreen: React.FC = () => {
   const [current] = React.useState(0);
   const [visible, setVisible] = React.useState(false);
 
+  const [selectedVirtue, setSelectedVirtue] = useState('');
+  const [selectedDay, setSelectedDay] = useState(0);
+
   const currentVirtue = useMemo(() => {
 
     if (!frames[current]) {
@@ -244,7 +247,7 @@ const VirtuesScreen: React.FC = () => {
 
 
   const element = useCallback(
-    (virtue: string, index: number, highlight: boolean) => {
+    (virtue: string, index: number, highlight: boolean, border: boolean) => {
       const Dots = ({ value }: { value: number }) => (
         <View
           style={{
@@ -256,7 +259,7 @@ const VirtuesScreen: React.FC = () => {
             flexWrap: 'wrap',
             alignItems: 'center',
             alignContent: 'center',
-            padding: 8
+            padding: 4
           }}
         >
           {Array.from(Array(value).keys()).map((i) => (
@@ -301,17 +304,21 @@ const VirtuesScreen: React.FC = () => {
           break;
       }
       return (
+        <TouchableOpacity onPress={() => {setSelectedDay(index); setSelectedVirtue(virtue)}}>
         <View
           style={{
             height: '100%',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            backgroundColor: highlight ? '#E8D8E5' : 'white'
+            backgroundColor: highlight ? '#E8D8E5' : 'white',
+            borderWidth: border ? 3 : 0,
+            borderColor: '#5D3754'
           }}
         >
           {renderedValue}
         </View>
+        </TouchableOpacity>
       );
     },
     [frames, current]
@@ -367,22 +374,18 @@ const VirtuesScreen: React.FC = () => {
   }, [frames, current]);
 
   const onSaveAdjustment = useCallback(
-    (action: string, day: number, virtue: string, amount: number = 1) => {
-      if (action === 'dismiss') {
-        setVisible(false);
-        return;
-      }
+    (action: string) => {
       dispatch(
         updateFrame({
           ...frames[current],
           data: {
             ...frames[current].data,
-            [virtue]: frames[current].data[virtue].map((value, index) => {
-              if (index === day) {
+            [selectedVirtue]: frames[current].data[selectedVirtue].map((value, index) => {
+              if (index === selectedDay - 1) {
                 if (action === 'plus') {
-                  return value + amount;
+                  return value + 1;
                 } else {
-                  return value - amount;
+                  return value - 1;
                 }
               }
               return value;
@@ -392,7 +395,7 @@ const VirtuesScreen: React.FC = () => {
       );
       setVisible(false);
     },
-    [frames, current]
+    [frames, current, selectedDay, selectedVirtue]
   );
 
   // Render null directly without a conditional hook call.
@@ -429,7 +432,7 @@ const VirtuesScreen: React.FC = () => {
                   key={cellIndex}
                   data={
                     cellIndex > 0
-                      ? element(rowData[0], cellIndex, rowData[0] === currentVirtue || cellIndex === currentDay)
+                      ? element(rowData[0], cellIndex, rowData[0] === currentVirtue || cellIndex === currentDay, rowData[0] === selectedVirtue && cellIndex === selectedDay)
                       : title(rowData[0], rowData[0] === currentVirtue)
                   }
                 />
@@ -440,18 +443,14 @@ const VirtuesScreen: React.FC = () => {
         <View
           style={{
             marginBottom: 20,
+            marginRight: 20,
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'space-around'
-          }}
+            justifyContent: 'flex-end'
+          }} 
         >
-          <Button
-            mode="contained"
-            style={{ backgroundColor: '#5D3754' }}
-            onPress={() => setVisible(true)}
-          >
-            Log an Entry
-          </Button>
+          <IconButton icon='minus' size={32} containerColor={selectedVirtue == '' ? 'grey': '#5D3754'} iconColor='white' onPress={() => onSaveAdjustment('minus')} disabled={selectedVirtue == ''}/>
+          <IconButton icon='plus' size={32} containerColor={selectedVirtue == '' ? 'grey': '#5D3754'} iconColor='white' onPress={() => onSaveAdjustment('plus')} disabled={selectedVirtue == ''}/>
         </View>
       </View>
     </PaperProvider>
