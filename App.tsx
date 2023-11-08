@@ -88,7 +88,7 @@ function ReduxApp(): JSX.Element | null {
             )
           })}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Insights"
           component={InsightsScreen}
           options={() => ({
@@ -100,8 +100,8 @@ function ReduxApp(): JSX.Element | null {
               />
             )
           })}
-        />
-         <Tab.Screen
+        /> */}
+        <Tab.Screen
           name="Instructions"
           component={HelpScreen}
           options={() => ({

@@ -13,29 +13,66 @@ const DEFAULT_FRAME: Frame = {
   name: 'Foundations',
   date: new Date().toISOString(),
   data: {
-    constitution: {
-      tagLine: 'Drink not to excess',
+    temperance: {
+      tagLine: 'Eat not to dullness; drink not to elevation.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    silence: {
+      tagLine:
+        'Speak not but what may benefit others or yourself; avoid trifling conversation.',
       log: [0, 0, 0, 0, 0, 0, 0]
     },
     order: {
-      tagLine: '',
+      tagLine:
+        'Let all your things have their places; let each part of your business have its time.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    resolution: {
+      tagLine:
+        'Resolve to perform what you ought; perform without fail what you resolve.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    frugality: {
+      tagLine:
+        'Make no expense but to do good to others or yourself; that is, waste nothing.',
       log: [0, 0, 0, 0, 0, 0, 0]
     },
     industry: {
-      tagLine: '',
+      tagLine:
+        'Lose no time; be always employed in something useful; cut off all unnecessary actions.',
       log: [0, 0, 0, 0, 0, 0, 0]
     },
-    amity: {
-      tagLine: '',
+    sincerity: {
+      tagLine:
+        'Use no hurtful deceit; think innocently and justly, and, if you speak, speak accordingly.',
       log: [0, 0, 0, 0, 0, 0, 0]
     },
-    direction: {
-      tagLine: '',
-
+    justice: {
+      tagLine:
+        'Wrong none by doing injuries, or omitting the benefits that are your duty.',
       log: [0, 0, 0, 0, 0, 0, 0]
     },
-    curiosity: {
-      tagLine: '',
+    moderation: {
+      tagLine:
+        'Avoid extremes; forbear resenting injuries so much as you think they deserve.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    cleanliness: {
+      tagLine: 'Tolerate no uncleanliness in body, clothes, or habitation.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    tranquility: {
+      tagLine:
+        'Be not disturbed at trifles, or at accidents common or unavoidable.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    chastity: {
+      tagLine:
+        "Rarely use venery but for health or offspring, never to dullness, weakness, or the injury of your own or another's peace or reputation.",
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    humility: {
+      tagLine: 'Imitate Jesus and Socrates.',
       log: [0, 0, 0, 0, 0, 0, 0]
     }
   }
@@ -76,4 +113,35 @@ export const putFrame = async (frame: Frame): Promise<Frame> => {
   }
   AsyncStorage.setItem('frames', JSON.stringify([frame]));
   return frame;
+};
+
+export const postFrame = async (
+  newFrame: Omit<Frame, 'id'>
+): Promise<Frame> => {
+  const rawFrames = await AsyncStorage.getItem('frames');
+  let frames: Frame[] = [];
+
+  if (rawFrames) {
+    frames = JSON.parse(rawFrames);
+  }
+
+  // Assuming 'id' is a string. Generate a new ID for the frame.
+  const frameWithId: Frame = {
+    ...newFrame,
+    id: Math.random().toString(36).substr(2, 9)
+  };
+
+  frames.push(frameWithId); // Add the new frame with an ID to the array
+  await AsyncStorage.setItem('frames', JSON.stringify(frames));
+
+  return frameWithId;
+};
+
+export const destroyFrame = async (frameId: string): Promise<void> => {
+  const rawFrames = await AsyncStorage.getItem('frames');
+  if (rawFrames) {
+    let frames: Frame[] = JSON.parse(rawFrames);
+    frames = frames.filter((frame) => frame.id !== frameId); // Remove the frame with the given ID
+    await AsyncStorage.setItem('frames', JSON.stringify(frames));
+  }
 };
