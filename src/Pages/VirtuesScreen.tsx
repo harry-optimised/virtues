@@ -209,7 +209,7 @@ const VirtuesScreen: React.FC = () => {
   const frames = useSelector(selectAllFrames);
   const dispatch = useDispatch<AppDispatch>();
   const [current] = React.useState(0);
-  const [visible, setVisible] = React.useState(true);
+  const [visible, setVisible] = React.useState(false);
 
   const element = useCallback(
     (virtue: string, index: number) => {
