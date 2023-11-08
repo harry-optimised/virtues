@@ -42,3 +42,5 @@ export const updateFrame = createAsyncThunk(
     await putFrame(frame);
   }
 );
+
+// Move all this into store.tsx.

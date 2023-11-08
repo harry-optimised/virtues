@@ -1,10 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import profileReducer from './profile';
 import frameReducer from './frames';
 
 const store = configureStore({
   reducer: {
-    profile: profileReducer,
     appointments: frameReducer
   }
 });

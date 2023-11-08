@@ -3,3 +3,5 @@ export type Frame = {
   date: string;
   data: Record<string, number[]>;
 };
+
+// TODO: Put this all in one api.ts file.

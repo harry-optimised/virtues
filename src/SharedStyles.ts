@@ -2,10 +2,10 @@ import { StyleSheet } from 'react-native';
 
 export const sharedStyles = StyleSheet.create({
   appBar: {
-    backgroundColor: '#1b365d'
+    backgroundColor: '#5D3754'
   },
   secondaryButton: {
-    borderColor: '#1b365d',
+    borderColor: '#5D3754',
     borderWidth: 1,
     height: 30,
     paddingVertical: 0,
@@ -14,6 +14,6 @@ export const sharedStyles = StyleSheet.create({
     marginVertical: 0
   },
   primaryButton: {
-    backgroundColor: '#1b365d'
+    backgroundColor: '#5D3754'
   }
 });

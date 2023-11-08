@@ -37,10 +37,9 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    backgroundColor: '#EFF4FA',
     height: 48
   },
-  head: { height: 40, backgroundColor: '#c0d3ec' },
+  head: { height: 40 },
   text: { margin: 6, textAlign: 'center' }
 });
 
@@ -95,8 +94,8 @@ const Adjuster = ({
           <Button
             mode={day === 0 ? 'contained' : 'outlined'}
             style={{ margin: 4, minWidth: 32 }}
-            buttonColor={day === 0 ? '#1b365d' : 'white'}
-            textColor={day === 0 ? 'white' : '#1b365d'}
+            buttonColor={day === 0 ? '#5D3754' : 'white'}
+            textColor={day === 0 ? 'white' : '#5D3754'}
             compact={true}
             onPress={() => setDay(0)}
           >
@@ -105,8 +104,8 @@ const Adjuster = ({
           <Button
             mode={day === 1 ? 'contained' : 'outlined'}
             style={{ margin: 4, minWidth: 32 }}
-            buttonColor={day === 1 ? '#1b365d' : 'white'}
-            textColor={day === 1 ? 'white' : '#1b365d'}
+            buttonColor={day === 1 ? '#5D3754' : 'white'}
+            textColor={day === 1 ? 'white' : '#5D3754'}
             compact={true}
             onPress={() => setDay(1)}
           >
@@ -115,8 +114,8 @@ const Adjuster = ({
           <Button
             mode={day === 2 ? 'contained' : 'outlined'}
             style={{ margin: 4, minWidth: 32 }}
-            buttonColor={day === 2 ? '#1b365d' : 'white'}
-            textColor={day === 2 ? 'white' : '#1b365d'}
+            buttonColor={day === 2 ? '#5D3754' : 'white'}
+            textColor={day === 2 ? 'white' : '#5D3754'}
             compact={true}
             onPress={() => setDay(2)}
           >
@@ -125,8 +124,8 @@ const Adjuster = ({
           <Button
             mode={day === 3 ? 'contained' : 'outlined'}
             style={{ margin: 4, minWidth: 32 }}
-            buttonColor={day === 3 ? '#1b365d' : 'white'}
-            textColor={day === 3 ? 'white' : '#1b365d'}
+            buttonColor={day === 3 ? '#5D3754' : 'white'}
+            textColor={day === 3 ? 'white' : '#5D3754'}
             compact={true}
             onPress={() => setDay(3)}
           >
@@ -135,8 +134,8 @@ const Adjuster = ({
           <Button
             mode={day === 4 ? 'contained' : 'outlined'}
             style={{ margin: 4, minWidth: 32 }}
-            buttonColor={day === 4 ? '#1b365d' : 'white'}
-            textColor={day === 4 ? 'white' : '#1b365d'}
+            buttonColor={day === 4 ? '#5D3754' : 'white'}
+            textColor={day === 4 ? 'white' : '#5D3754'}
             compact={true}
             onPress={() => setDay(4)}
           >
@@ -145,8 +144,8 @@ const Adjuster = ({
           <Button
             mode={day === 5 ? 'contained' : 'outlined'}
             style={{ margin: 4, minWidth: 32 }}
-            buttonColor={day === 5 ? '#1b365d' : 'white'}
-            textColor={day === 5 ? 'white' : '#1b365d'}
+            buttonColor={day === 5 ? '#5D3754' : 'white'}
+            textColor={day === 5 ? 'white' : '#5D3754'}
             compact={true}
             onPress={() => setDay(5)}
           >
@@ -155,8 +154,8 @@ const Adjuster = ({
           <Button
             mode={day === 6 ? 'contained' : 'outlined'}
             style={{ margin: 4, minWidth: 32 }}
-            buttonColor={day === 6 ? '#1b365d' : 'white'}
-            textColor={day === 6 ? 'white' : '#1b365d'}
+            buttonColor={day === 6 ? '#5D3754' : 'white'}
+            textColor={day === 6 ? 'white' : '#5D3754'}
             compact={true}
             onPress={() => setDay(6)}
           >
@@ -187,7 +186,7 @@ const Adjuster = ({
           <IconButton
             icon="minus"
             mode="contained"
-            style={{ backgroundColor: '#1b365d', marginRight: 16 }}
+            style={{ backgroundColor: '#5D3754', marginRight: 16 }}
             iconColor="white"
             size={32}
             onPress={() => onLocalSave('minus')}
@@ -195,7 +194,7 @@ const Adjuster = ({
           <IconButton
             icon="plus"
             mode="contained"
-            style={{ backgroundColor: '#1b365d', marginLeft: 16 }}
+            style={{ backgroundColor: '#5D3754', marginLeft: 16 }}
             iconColor="white"
             size={32}
             onPress={() => onLocalSave('plus')}
@@ -229,7 +228,12 @@ const VirtuesScreen: React.FC = () => {
           }}
         >
           {Array.from(Array(value).keys()).map((i) => (
-            <MaterialCommunityIcons key={i} name="square-rounded" size={8} />
+            <MaterialCommunityIcons
+              key={i}
+              name="square-rounded"
+              size={8}
+              color="#5D3754"
+            />
           ))}
         </View>
       );
@@ -381,7 +385,7 @@ const VirtuesScreen: React.FC = () => {
         >
           <Button
             mode="contained"
-            style={{ backgroundColor: '#1b365d' }}
+            style={{ backgroundColor: '#5D3754' }}
             onPress={() => setVisible(true)}
           >
             Log an Entry

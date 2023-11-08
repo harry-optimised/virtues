@@ -8,7 +8,6 @@ import store, { AppDispatch } from './src/state/store';
 // Screens
 import VirtuesScreen from './src/Pages/VirtuesScreen';
 import SettingsScreen from './src/Pages/SettingsScreen';
-import ProfileScreen from './src/Pages/ProfileScreen';
 
 import { StyleSheet, Text } from 'react-native';
 import { View } from 'react-native';
@@ -21,10 +20,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#1b365d'
+    backgroundColor: '#5D3754'
   },
   tabBar: {
-    backgroundColor: '#1b365d',
+    backgroundColor: '#5D3754',
     paddingBottom: 4,
     paddingTop: 8,
     height: 60
@@ -68,7 +67,7 @@ function ReduxApp(): JSX.Element | null {
           headerStyle: styles.header,
           headerTintColor: 'white',
           tabBarActiveTintColor: 'white',
-          tabBarInactiveTintColor: '#A1BCE3',
+          tabBarInactiveTintColor: '#E8D8E5',
           tabBarStyle: styles.tabBar
         }}
       >
@@ -93,19 +92,6 @@ function ReduxApp(): JSX.Element | null {
           options={() => ({
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="cog" color={color} size={size} />
-            )
-          })}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={ProfileScreen}
-          options={() => ({
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons
-                name="account"
-                color={color}
-                size={size}
-              />
             )
           })}
         />
