@@ -299,6 +299,9 @@ const VirtuesScreen: React.FC = () => {
         case 5:
           renderedValue = <Dots value={5} />;
           break;
+        case 6:
+          renderedValue = <Dots value={6} />;
+          break;
         default:
           renderedValue = sixPlus;
           break;
@@ -375,6 +378,7 @@ const VirtuesScreen: React.FC = () => {
 
   const onSaveAdjustment = useCallback(
     (action: string) => {
+      
       dispatch(
         updateFrame({
           ...frames[current],
@@ -383,9 +387,9 @@ const VirtuesScreen: React.FC = () => {
             [selectedVirtue]: frames[current].data[selectedVirtue].map((value, index) => {
               if (index === selectedDay - 1) {
                 if (action === 'plus') {
-                  return value + 1;
+                  return value < 6 ? value + 1 : 6;
                 } else {
-                  return value - 1;
+                  return value > 0 ? value - 1 : 0;
                 }
               }
               return value;
