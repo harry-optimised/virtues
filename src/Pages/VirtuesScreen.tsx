@@ -1,11 +1,11 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAllFrames, updateFrame } from '../state/frames';
 
 // UI
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import {
   Text,
   PaperProvider,
@@ -13,7 +13,8 @@ import {
   Modal,
   Button,
   Divider,
-  IconButton
+  IconButton,
+  Paragraph
 } from 'react-native-paper';
 import { Table, TableWrapper, Row, Cell } from 'react-native-reanimated-table';
 import { Picker } from '@react-native-picker/picker';
@@ -27,6 +28,7 @@ import { capitalize } from 'lodash';
 
 // Custom Components
 import { AppDispatch } from '../state/store';
+import { Frame } from '../api/types';
 
 const styles = StyleSheet.create({
   ...sharedStyles,
@@ -51,168 +53,13 @@ interface AdjusterProps {
   index?: number;
 }
 
-const Adjuster = ({
-  visible,
-  onSave,
-  virtues,
-  virtue,
-  index
-}: AdjusterProps) => {
-  const [day, setDay] = React.useState(index ?? 0);
-  const containerStyle = {
-    backgroundColor: 'white',
-    margin: 20,
-    borderRadius: 20
-  };
-  const [selectedVirtue, setSelectedVirtue] = useState(virtue ?? virtues[0]);
-
-  const onLocalSave = useCallback(
-    (action: string) => {
-      onSave(action, day, selectedVirtue);
-    },
-    [day, selectedVirtue]
-  );
-
-  return (
-    <Portal>
-      <Modal
-        visible={visible}
-        onDismiss={() => onLocalSave('dismiss')}
-        contentContainerStyle={containerStyle}
-      >
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 16,
-            marginBottom: 16
-          }}
-        >
-          <Button
-            mode={day === 0 ? 'contained' : 'outlined'}
-            style={{ margin: 4, minWidth: 32 }}
-            buttonColor={day === 0 ? '#5D3754' : 'white'}
-            textColor={day === 0 ? 'white' : '#5D3754'}
-            compact={true}
-            onPress={() => setDay(0)}
-          >
-            M
-          </Button>
-          <Button
-            mode={day === 1 ? 'contained' : 'outlined'}
-            style={{ margin: 4, minWidth: 32 }}
-            buttonColor={day === 1 ? '#5D3754' : 'white'}
-            textColor={day === 1 ? 'white' : '#5D3754'}
-            compact={true}
-            onPress={() => setDay(1)}
-          >
-            T
-          </Button>
-          <Button
-            mode={day === 2 ? 'contained' : 'outlined'}
-            style={{ margin: 4, minWidth: 32 }}
-            buttonColor={day === 2 ? '#5D3754' : 'white'}
-            textColor={day === 2 ? 'white' : '#5D3754'}
-            compact={true}
-            onPress={() => setDay(2)}
-          >
-            W
-          </Button>
-          <Button
-            mode={day === 3 ? 'contained' : 'outlined'}
-            style={{ margin: 4, minWidth: 32 }}
-            buttonColor={day === 3 ? '#5D3754' : 'white'}
-            textColor={day === 3 ? 'white' : '#5D3754'}
-            compact={true}
-            onPress={() => setDay(3)}
-          >
-            T
-          </Button>
-          <Button
-            mode={day === 4 ? 'contained' : 'outlined'}
-            style={{ margin: 4, minWidth: 32 }}
-            buttonColor={day === 4 ? '#5D3754' : 'white'}
-            textColor={day === 4 ? 'white' : '#5D3754'}
-            compact={true}
-            onPress={() => setDay(4)}
-          >
-            F
-          </Button>
-          <Button
-            mode={day === 5 ? 'contained' : 'outlined'}
-            style={{ margin: 4, minWidth: 32 }}
-            buttonColor={day === 5 ? '#5D3754' : 'white'}
-            textColor={day === 5 ? 'white' : '#5D3754'}
-            compact={true}
-            onPress={() => setDay(5)}
-          >
-            S
-          </Button>
-          <Button
-            mode={day === 6 ? 'contained' : 'outlined'}
-            style={{ margin: 4, minWidth: 32 }}
-            buttonColor={day === 6 ? '#5D3754' : 'white'}
-            textColor={day === 6 ? 'white' : '#5D3754'}
-            compact={true}
-            onPress={() => setDay(6)}
-          >
-            S
-          </Button>
-        </View>
-        <Divider />
-        <View style={{ marginBottom: 0, marginTop: 0 }}>
-          <Picker
-            selectedValue={selectedVirtue}
-            onValueChange={(itemValue) => setSelectedVirtue(itemValue)}
-          >
-            {virtues.map((v) => (
-              <Picker.Item key={v} label={v} value={v} />
-            ))}
-          </Picker>
-        </View>
-        <Divider />
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            marginTop: 16,
-            marginBottom: 16
-          }}
-        >
-          <IconButton
-            icon="minus"
-            mode="contained"
-            style={{ backgroundColor: '#5D3754', marginRight: 16 }}
-            iconColor="white"
-            size={32}
-            onPress={() => onLocalSave('minus')}
-          />
-          <IconButton
-            icon="plus"
-            mode="contained"
-            style={{ backgroundColor: '#5D3754', marginLeft: 16 }}
-            iconColor="white"
-            size={32}
-            onPress={() => onLocalSave('plus')}
-          />
-        </View>
-      </Modal>
-    </Portal>
-  );
-};
 
 const VirtuesScreen: React.FC = () => {
   const frames = useSelector(selectAllFrames);
   const dispatch = useDispatch<AppDispatch>();
-  const [current] = React.useState(0);
+  const [current, setCurrent] = React.useState(0);
   const [visible, setVisible] = React.useState(false);
-
-  const [selectedVirtue, setSelectedVirtue] = useState('');
-  const [selectedDay, setSelectedDay] = useState(0);
+  const [tagLine, setTagLine] = React.useState('');
 
   const currentVirtue = useMemo(() => {
 
@@ -245,6 +92,16 @@ const VirtuesScreen: React.FC = () => {
     return new Date().getDay();
   }, []);
 
+  const [selectedVirtue, setSelectedVirtue] = useState('');
+  const [selectedDay, setSelectedDay] = useState(0);
+
+  useEffect(() => {
+    if (!currentVirtue || !currentDay) {
+      return;
+    }
+    setSelectedVirtue(currentVirtue);
+    setSelectedDay(currentDay);
+  }, [currentVirtue, currentDay]);
 
   const element = useCallback(
     (virtue: string, index: number, highlight: boolean, border: boolean) => {
@@ -275,12 +132,12 @@ const VirtuesScreen: React.FC = () => {
 
       const sixPlus = (
         <Text style={{ textAlign: 'center' }}>
-          {frames[current].data[virtue][index - 1]}
+          {frames[current].data[virtue].log[index - 1]}
         </Text>
       );
 
       let renderedValue = null;
-      switch (frames[current].data[virtue][index - 1]) {
+      switch (frames[current].data[virtue].log[index - 1]) {
         case 0:
           renderedValue = null;
           break;
@@ -326,10 +183,18 @@ const VirtuesScreen: React.FC = () => {
     },
     [frames, current]
   );
+ 
+
 
   const title = useCallback(
-    (virtue: string, highlight: boolean) => {
+    (virtue: string, highlight: boolean, tagLine: string) => {
       return (
+        // <TouchableOpacity onPress={() => {setTagLine((previous) => {
+        //   if (previous.includes(capitalize(virtue))) {
+        //     return '';
+        //   }
+        //   return `${capitalize(virtue)}: ${tagLine}`;
+        // })}}>
         <View style={{
           height: '100%',
             display: 'flex',
@@ -338,6 +203,7 @@ const VirtuesScreen: React.FC = () => {
         }}>
           <Text style={{ textAlign: 'center' }}>{capitalize(virtue)}</Text>
         </View>
+       // </TouchableOpacity>
       );
     },
     [frames, current]
@@ -345,7 +211,6 @@ const VirtuesScreen: React.FC = () => {
 
   const topTitle = useCallback(
     (day: string, highlight: boolean) => {
-      console.log(day)
       return (
         <View style={{
             height: 48,
@@ -368,7 +233,7 @@ const VirtuesScreen: React.FC = () => {
       return null;
     }
     return Object.entries(frames[current].data).map(([key, values]) => {
-      return [key, ...values.map(String)];
+      return [key, ...values.log.map(String)];
     });
   }, [frames, current]);
 
@@ -384,16 +249,19 @@ const VirtuesScreen: React.FC = () => {
           ...frames[current],
           data: {
             ...frames[current].data,
-            [selectedVirtue]: frames[current].data[selectedVirtue].map((value, index) => {
-              if (index === selectedDay - 1) {
-                if (action === 'plus') {
-                  return value < 6 ? value + 1 : 6;
-                } else {
-                  return value > 0 ? value - 1 : 0;
+            [selectedVirtue]: {
+              ...frames[current].data[selectedVirtue],
+              log: frames[current].data[selectedVirtue].log.map((value, index) => {
+                if (index === selectedDay - 1) {
+                  if (action === 'plus') {
+                    return value + 1;
+                  }
+                  return value - 1;
                 }
+                return value;
               }
-              return value;
-            })
+              )
+            }
           }
         })
       );
@@ -402,23 +270,45 @@ const VirtuesScreen: React.FC = () => {
     [frames, current, selectedDay, selectedVirtue]
   );
 
+
   // Render null directly without a conditional hook call.
   if (frames.length === 0 || !frames[current]?.data || !data) {
     return null;
   } 
 
+  const getFrameTitle = (frame: Frame) => {
+    const frameStart = new Date(frame.date);
+    const monday = new Date(
+      frameStart.getFullYear(),
+      frameStart.getMonth(),
+      frameStart.getDate() - frameStart.getDay() + 1
+    );
+    const start = `${monday.getDate()}/${monday.getMonth() + 1}`;
+    const endDate = monday.setDate(monday.getDate() + ( 6 + 7 * Object.keys(frame.data).length));
+    const end = `${new Date(endDate).getDate()}/${new Date(endDate).getMonth() + 1}`;
+    return `${start} - ${end}`;
+  }
+
+  
+
   return (
     <PaperProvider>
-      <View style={styles.container}>
-        <Adjuster
-          visible={visible}
-          onSave={onSaveAdjustment}
-          virtues={virtues}
-        />
+      <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+        <IconButton icon='chevron-left' size={16} containerColor={current === 0 ? 'lightgray': '#5D3754'} iconColor='white' onPress={() => {if (current > 0) {setCurrent(current - 1)}}} disabled={current === 0}/>
+        <Text style={{ textAlign: 'center', fontSize: 24, marginTop: 8, marginBottom: 8, marginHorizontal: 16 }}>
+        {frames[current] ? getFrameTitle(frames[current]) : null}
+      </Text>
+      <IconButton icon='chevron-right' size={16} containerColor={current === frames.length - 1 ? 'lightgray': '#5D3754'} iconColor='white' onPress={() => {if (current < frames.length - 1) {setCurrent(current + 1)}}} disabled={current === frames.length - 1}/>
+      </View>
+      {tagLine ? (
+        <View style={{display: 'flex', flexDirection: 'row', backgroundColor: 'lightgray'}}>
+        <Paragraph style={{fontSize: 18}}>{tagLine}</Paragraph>
+        </View>
+      ) : null}
+      <ScrollView contentContainerStyle={styles.container}>
         <Table borderStyle={{ borderWidth: 1 }}>
            <TableWrapper key={0} style={styles.row}>
             {header.map((cellData, cellIndex) => {
-              console.log(cellIndex, currentDay)
               return (
               <Cell
                 style={{ flex: cellIndex === 0 ? 2 : 1 }}
@@ -437,26 +327,27 @@ const VirtuesScreen: React.FC = () => {
                   data={
                     cellIndex > 0
                       ? element(rowData[0], cellIndex, rowData[0] === currentVirtue || cellIndex === currentDay, rowData[0] === selectedVirtue && cellIndex === selectedDay)
-                      : title(rowData[0], rowData[0] === currentVirtue)
+                      : title(rowData[0], rowData[0] === currentVirtue, frames[current].data[rowData[0]].tagLine)
                   }
                 />
               ))}
             </TableWrapper>
           ))}
         </Table>
-        <View
+      </ScrollView>
+      <View
           style={{
-            marginBottom: 20,
-            marginRight: 20,
+            bottom: 8,
+            right: 8,
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'flex-end'
+            justifyContent: 'flex-end',
+            position: 'absolute',
           }} 
         >
-          <IconButton icon='minus' size={32} containerColor={selectedVirtue == '' ? 'grey': '#5D3754'} iconColor='white' onPress={() => onSaveAdjustment('minus')} disabled={selectedVirtue == ''}/>
-          <IconButton icon='plus' size={32} containerColor={selectedVirtue == '' ? 'grey': '#5D3754'} iconColor='white' onPress={() => onSaveAdjustment('plus')} disabled={selectedVirtue == ''}/>
+          <IconButton icon='minus' size={32} containerColor={selectedVirtue == '' ? 'lightgray': '#5D3754'} iconColor='white' onPress={() => onSaveAdjustment('minus')} disabled={selectedVirtue == ''}/>
+          <IconButton icon='plus' size={32} containerColor={selectedVirtue == '' ? 'lightgray': '#5D3754'} iconColor='white' onPress={() => onSaveAdjustment('plus')} disabled={selectedVirtue == ''}/>
         </View>
-      </View>
     </PaperProvider>
   );
 };

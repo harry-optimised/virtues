@@ -8,6 +8,8 @@ import store, { AppDispatch } from './src/state/store';
 // Screens
 import VirtuesScreen from './src/Pages/VirtuesScreen';
 import SettingsScreen from './src/Pages/SettingsScreen';
+import HelpScreen from './src/Pages/HelpScreen';
+import InsightsScreen from './src/Pages/InsightsScreen';
 
 import { StyleSheet, Text } from 'react-native';
 import { View } from 'react-native';
@@ -80,6 +82,32 @@ function ReduxApp(): JSX.Element | null {
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="flower-tulip"
+                color={color}
+                size={size}
+              />
+            )
+          })}
+        />
+        <Tab.Screen
+          name="Insights"
+          component={InsightsScreen}
+          options={() => ({
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="chart-line"
+                color={color}
+                size={size}
+              />
+            )
+          })}
+        />
+         <Tab.Screen
+          name="Instructions"
+          component={HelpScreen}
+          options={() => ({
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="book-open-outline"
                 color={color}
                 size={size}
               />

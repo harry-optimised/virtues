@@ -10,14 +10,34 @@ export interface ListFramesAPIResponse {
 
 const DEFAULT_FRAME: Frame = {
   id: Math.floor(100000 + Math.random() * 900000).toString(),
+  name: 'Foundations',
   date: new Date().toISOString(),
   data: {
-    constitution: [0, 0, 0, 0, 0, 0, 0],
-    order: [0, 0, 0, 0, 0, 0, 0],
-    industry: [0, 0, 0, 0, 0, 0, 0],
-    amity: [0, 0, 0, 0, 0, 0, 0],
-    direction: [0, 0, 0, 0, 0, 0, 0],
-    curiosity: [0, 0, 0, 0, 0, 0, 0]
+    constitution: {
+      tagLine: 'Drink not to excess',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    order: {
+      tagLine: '',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    industry: {
+      tagLine: '',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    amity: {
+      tagLine: '',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    direction: {
+      tagLine: '',
+
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    curiosity: {
+      tagLine: '',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    }
   }
 };
 
