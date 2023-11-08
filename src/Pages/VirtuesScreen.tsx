@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectAllFrames, updateFrame } from '../state/frames';
 
 // UI
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import {
   Text,
   PaperProvider,
@@ -17,6 +17,7 @@ import {
 } from 'react-native-paper';
 import { Table, TableWrapper, Row, Cell } from 'react-native-reanimated-table';
 import { Picker } from '@react-native-picker/picker';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Styles
 import { sharedStyles } from '../SharedStyles';
@@ -213,11 +214,66 @@ const VirtuesScreen: React.FC = () => {
 
   const element = useCallback(
     (virtue: string, index: number) => {
+      const Dots = ({ value }: { value: number }) => (
+        <View
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            alignContent: 'center',
+            padding: 8
+          }}
+        >
+          {Array.from(Array(value).keys()).map((i) => (
+            <MaterialCommunityIcons key={i} name="square-rounded" size={8} />
+          ))}
+        </View>
+      );
+
+      const sixPlus = (
+        <Text style={{ textAlign: 'center' }}>
+          {frames[current].data[virtue][index - 1]}
+        </Text>
+      );
+
+      let renderedValue = null;
+      switch (frames[current].data[virtue][index - 1]) {
+        case 0:
+          renderedValue = null;
+          break;
+        case 1:
+          renderedValue = <Dots value={1} />;
+          break;
+        case 2:
+          renderedValue = <Dots value={2} />;
+          break;
+        case 3:
+          renderedValue = <Dots value={3} />;
+          break;
+        case 4:
+          renderedValue = <Dots value={4} />;
+          break;
+        case 5:
+          renderedValue = <Dots value={5} />;
+          break;
+        default:
+          renderedValue = sixPlus;
+          break;
+      }
       return (
-        <View>
-          <Text style={{ textAlign: 'center' }}>
-            {frames[current].data[virtue][index - 1]}
-          </Text>
+        <View
+          style={{
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center'
+          }}
+        >
+          {renderedValue}
         </View>
       );
     },
@@ -228,7 +284,7 @@ const VirtuesScreen: React.FC = () => {
     (virtue: string) => {
       return (
         <View>
-          <Text style={{ textAlign: 'center' }}>{capitalize(virtue[0])}</Text>
+          <Text style={{ textAlign: 'center' }}>{capitalize(virtue)}</Text>
         </View>
       );
     },
@@ -251,7 +307,7 @@ const VirtuesScreen: React.FC = () => {
   }, [frames, current]);
 
   const onSaveAdjustment = useCallback(
-    (action: string, day: number, virtue: string) => {
+    (action: string, day: number, virtue: string, amount: number = 1) => {
       if (action === 'dismiss') {
         setVisible(false);
         return;
@@ -264,9 +320,9 @@ const VirtuesScreen: React.FC = () => {
             [virtue]: frames[current].data[virtue].map((value, index) => {
               if (index === day) {
                 if (action === 'plus') {
-                  return value + 1;
+                  return value + amount;
                 } else {
-                  return value - 1;
+                  return value - amount;
                 }
               }
               return value;
@@ -292,12 +348,18 @@ const VirtuesScreen: React.FC = () => {
           onSave={onSaveAdjustment}
           virtues={virtues}
         />
-        <Table borderStyle={{ borderColor: 'transparent' }}>
-          <Row data={header} style={styles.head} textStyle={styles.text} />
+        <Table borderStyle={{ borderWidth: 1 }}>
+          <Row
+            data={header}
+            flexArr={[2, 1, 1, 1, 1, 1, 1, 1]}
+            style={styles.head}
+            textStyle={styles.text}
+          />
           {data.map((rowData, index) => (
             <TableWrapper key={index} style={styles.row}>
               {rowData.map((cellData, cellIndex) => (
                 <Cell
+                  style={{ flex: cellIndex === 0 ? 2 : 1 }}
                   key={cellIndex}
                   data={
                     cellIndex > 0
@@ -329,5 +391,5 @@ const VirtuesScreen: React.FC = () => {
     </PaperProvider>
   );
 };
-
+// TODO: Handle case where so many virtues they go off the screen.
 export default VirtuesScreen;
