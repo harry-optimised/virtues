@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState, useEffect } from 'react';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAllFrames, putFrame } from '../state/frames';
+import { selectAllFrames, updateFrame } from '../state/frames';
 
 // UI
 import { View, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
@@ -244,7 +244,7 @@ const VirtuesScreen: React.FC = () => {
   const onSaveAdjustment = useCallback(
     (action: string) => {
       dispatch(
-        putFrame({
+        updateFrame({
           ...frames[current],
           data: {
             ...frames[current].data,
@@ -274,23 +274,6 @@ const VirtuesScreen: React.FC = () => {
   if (frames.length === 0 || !frames[current]?.data || !data) {
     return null;
   }
-
-  const getFrameTitle = (frame: Frame) => {
-    const frameStart = new Date(frame.date);
-    const monday = new Date(
-      frameStart.getFullYear(),
-      frameStart.getMonth(),
-      frameStart.getDate() - frameStart.getDay() + 1
-    );
-    const start = `${monday.getDate()}/${monday.getMonth() + 1}`;
-    const endDate = monday.setDate(
-      monday.getDate() + (6 + 7 * Object.keys(frame.data).length)
-    );
-    const end = `${new Date(endDate).getDate()}/${
-      new Date(endDate).getMonth() + 1
-    }`;
-    return `${start} - ${end}`;
-  };
 
   return (
     <PaperProvider>
@@ -323,7 +306,7 @@ const VirtuesScreen: React.FC = () => {
             marginHorizontal: 16
           }}
         >
-          {frames[current] ? getFrameTitle(frames[current]) : null}
+          {frames[current] ? frames[current].name : null}
         </Text>
         <IconButton
           icon="chevron-right"
