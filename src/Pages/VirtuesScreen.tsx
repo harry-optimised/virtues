@@ -211,8 +211,40 @@ const VirtuesScreen: React.FC = () => {
   const [current] = React.useState(0);
   const [visible, setVisible] = React.useState(false);
 
+  const currentVirtue = useMemo(() => {
+
+    if (!frames[current]) {
+      return null;
+    }
+
+    const frameStart = new Date(frames[current].date);
+
+
+    // TODO: This logic feels like it should be in a Frame class or something.
+    const monday = new Date(
+      frameStart.getFullYear(),
+      frameStart.getMonth(),
+      frameStart.getDate() - frameStart.getDay() + 1
+    );
+
+    // // How many days between the monday and today?
+    const days = Math.floor(
+      (new Date().getTime() - monday.getTime()) / (1000 * 3600 * 24)
+    );
+
+    const numWeeks = Math.floor(days / 7);
+    const virtues = Object.keys(frames[current].data);
+    return virtues[numWeeks % virtues.length];
+
+  }, [frames, current]);
+
+  const currentDay = useMemo(() => {
+    return new Date().getDay();
+  }, []);
+
+
   const element = useCallback(
-    (virtue: string, index: number) => {
+    (virtue: string, index: number, highlight: boolean) => {
       const Dots = ({ value }: { value: number }) => (
         <View
           style={{
@@ -274,7 +306,8 @@ const VirtuesScreen: React.FC = () => {
             height: '100%',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            backgroundColor: highlight ? '#E8D8E5' : 'white'
           }}
         >
           {renderedValue}
@@ -285,10 +318,33 @@ const VirtuesScreen: React.FC = () => {
   );
 
   const title = useCallback(
-    (virtue: string) => {
+    (virtue: string, highlight: boolean) => {
       return (
-        <View>
+        <View style={{
+          height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center', backgroundColor: highlight ? '#E8D8E5' : 'white'
+        }}>
           <Text style={{ textAlign: 'center' }}>{capitalize(virtue)}</Text>
+        </View>
+      );
+    },
+    [frames, current]
+  );
+
+  const topTitle = useCallback(
+    (day: string, highlight: boolean) => {
+      console.log(day)
+      return (
+        <View style={{
+            height: 48,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center', 
+            backgroundColor: highlight ? '#E8D8E5' : 'white'
+        }}>
+          <Text style={{ textAlign: 'center' }}>{capitalize(day)}</Text>
         </View>
       );
     },
@@ -342,7 +398,7 @@ const VirtuesScreen: React.FC = () => {
   // Render null directly without a conditional hook call.
   if (frames.length === 0 || !frames[current]?.data || !data) {
     return null;
-  }
+  } 
 
   return (
     <PaperProvider>
@@ -353,12 +409,18 @@ const VirtuesScreen: React.FC = () => {
           virtues={virtues}
         />
         <Table borderStyle={{ borderWidth: 1 }}>
-          <Row
-            data={header}
-            flexArr={[2, 1, 1, 1, 1, 1, 1, 1]}
-            style={styles.head}
-            textStyle={styles.text}
-          />
+           <TableWrapper key={0} style={styles.row}>
+            {header.map((cellData, cellIndex) => {
+              console.log(cellIndex, currentDay)
+              return (
+              <Cell
+                style={{ flex: cellIndex === 0 ? 2 : 1 }}
+                key={cellIndex}
+                data={topTitle(cellData, cellIndex === currentDay)}
+              />
+            )
+            })}
+          </TableWrapper>
           {data.map((rowData, index) => (
             <TableWrapper key={index} style={styles.row}>
               {rowData.map((cellData, cellIndex) => (
@@ -367,8 +429,8 @@ const VirtuesScreen: React.FC = () => {
                   key={cellIndex}
                   data={
                     cellIndex > 0
-                      ? element(rowData[0], cellIndex)
-                      : title(rowData[0])
+                      ? element(rowData[0], cellIndex, rowData[0] === currentVirtue || cellIndex === currentDay)
+                      : title(rowData[0], rowData[0] === currentVirtue)
                   }
                 />
               ))}
