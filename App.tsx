@@ -9,7 +9,6 @@ import store, { AppDispatch } from './src/state/store';
 import VirtuesScreen from './src/Pages/VirtuesScreen';
 import SettingsScreen from './src/Pages/SettingsScreen';
 import HelpScreen from './src/Pages/HelpScreen';
-import InsightsScreen from './src/Pages/InsightsScreen';
 
 import { StyleSheet, Text } from 'react-native';
 import { View } from 'react-native';
@@ -19,6 +18,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+//TODO:
+// - Manage virtues by using draggable and swipeable list.
+// - Add setting to do all virtues, one at a time, or all up to current.
+// - Fix date popup in iPhone.
 
 const styles = StyleSheet.create({
   header: {

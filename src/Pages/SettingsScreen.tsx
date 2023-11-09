@@ -269,7 +269,7 @@ const SettingsScreen: React.FC = () => {
                 </TouchableOpacity>
                 <List.Accordion
                   title="Virtues"
-                  description="Click a virtue to edit"
+                  description="Tap a virtue to edit"
                   style={{ backgroundColor: '#f2f2f2' }}
                 >
                   {Object.keys(frame.data).map((virtue) => (

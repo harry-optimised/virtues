@@ -5,14 +5,20 @@ import { useSelector } from 'react-redux';
 import { selectAllFrames } from '../state/frames';
 
 // UI
-import { PaperProvider } from 'react-native-paper';
+import { Dimensions, View } from 'react-native';
+import { PaperProvider, Card, Text, List } from 'react-native-paper';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Custom Components
 import Grid from '../Components/Grid';
 
+// Utils
+import { capitalize } from 'lodash';
+
 const VirtuesScreen: React.FC = () => {
   const frames = useSelector(selectAllFrames);
   const [frameIndex, setFrameIndex] = React.useState(0);
+  const [bannerVirtue, setBannerVirtue] = React.useState<string>('');
 
   const moveIndex = useCallback(
     (direction: string) => {
@@ -26,12 +32,28 @@ const VirtuesScreen: React.FC = () => {
   );
 
   const frame = frames[frameIndex];
+  type ValidKey = keyof typeof frame.data;
+  const banner = frame ? frame.data[bannerVirtue as ValidKey] : '';
 
   return (
     <PaperProvider>
-      {frame && <Grid frame={frames[frameIndex]} moveIndex={moveIndex} />}
+      {banner && (
+        <Card style={{ borderRadius: 0, minHeight: 96 }}>
+          <Card.Content>
+            <Text variant="titleLarge">{capitalize(bannerVirtue)}</Text>
+            <Text variant="bodyMedium">{banner.tagLine}</Text>
+          </Card.Content>
+        </Card>
+      )}
+      {frame && (
+        <Grid
+          frame={frames[frameIndex]}
+          moveIndex={moveIndex}
+          setBanner={setBannerVirtue}
+        />
+      )}
     </PaperProvider>
   );
 };
-// TODO: Handle case where so many virtues they go off the screen.
+
 export default VirtuesScreen;

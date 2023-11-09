@@ -8,7 +8,7 @@ import { AppDispatch } from '../../state/store';
 // UI
 import { View, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { IconButton, Text } from 'react-native-paper';
+import { IconButton, Text, Banner } from 'react-native-paper';
 
 // Styles
 import { sharedStyles } from '../../SharedStyles';
@@ -41,9 +41,10 @@ const HEADER = ['', 'M', 'T', 'W', 'T', 'F', 'S', 'S'];
 interface GridProps {
   frame: Frame;
   moveIndex(direction: string): void;
+  setBanner(virtue: string): void;
 }
 
-function Grid({ frame, moveIndex }: GridProps): ReactElement {
+function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
   const dispatch = useDispatch<AppDispatch>();
 
   const currentVirtueIndex = useMemo(() => {
@@ -67,6 +68,8 @@ function Grid({ frame, moveIndex }: GridProps): ReactElement {
   }, [frame]);
 
   const onSelect = useCallback((virtueIndex: number, dayIndex: number) => {
+    const virtue = dayIndex === 0 ? Object.keys(frame.data)[virtueIndex] : '';
+    setBanner(virtue);
     setSelectedVirtueIndex(virtueIndex);
     setSelectedDayIndex(dayIndex);
   }, []);
@@ -146,7 +149,12 @@ function Grid({ frame, moveIndex }: GridProps): ReactElement {
                 highlighted={dayIndex === currentDayIndex}
               />
             ) : (
-              <VirtueCell key={dayIndex} virtue={''} highlighted={false} />
+              <VirtueCell
+                key={dayIndex}
+                virtue={''}
+                highlighted={false}
+                selected={false}
+              />
             )
           )}
         </View>
@@ -175,11 +183,20 @@ function Grid({ frame, moveIndex }: GridProps): ReactElement {
                   />
                 </TouchableOpacity>
               ) : (
-                <VirtueCell
+                <TouchableOpacity
                   key={dayIndex}
-                  virtue={content}
-                  highlighted={virtueIndex === currentVirtueIndex}
-                />
+                  onPress={() => onSelect(virtueIndex, dayIndex)}
+                >
+                  <VirtueCell
+                    key={dayIndex}
+                    virtue={content}
+                    selected={
+                      selectedDayIndex === dayIndex &&
+                      selectedVirtueIndex === virtueIndex
+                    }
+                    highlighted={virtueIndex === currentVirtueIndex}
+                  />
+                </TouchableOpacity>
               )
             )}
           </View>
