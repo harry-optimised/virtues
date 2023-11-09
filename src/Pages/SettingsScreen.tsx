@@ -151,30 +151,29 @@ const SettingsScreen: React.FC = () => {
         <Modal
           visible={newNameVisible}
           onDismiss={() => setNewNameVisible(false)}
+          style={{ bottom: '50%' }}
           contentContainerStyle={{
             backgroundColor: 'white',
             padding: 20,
             margin: 16
           }}
         >
-          <KeyboardAvoidingView behavior="padding">
-            <Headline>Change Name</Headline>
-            <TextInput
-              label="Name"
-              mode="outlined"
-              value={newName}
-              onChangeText={(text) => setnewName(text)}
-              style={{ marginVertical: 16 }}
-            />
-            <Button
-              onPress={() => {
-                setNewNameVisible(false);
-                handleChangeName();
-              }}
-            >
-              Rename
-            </Button>
-          </KeyboardAvoidingView>
+          <Headline>Change Name</Headline>
+          <TextInput
+            label="Name"
+            mode="outlined"
+            defaultValue={newName}
+            onChangeText={(text) => setnewName(text)}
+            style={{ marginVertical: 16 }}
+          />
+          <Button
+            onPress={() => {
+              setNewNameVisible(false);
+              handleChangeName();
+            }}
+          >
+            Rename
+          </Button>
         </Modal>
         {newStartDateVisible && (
           <DateTimePicker
@@ -187,94 +186,91 @@ const SettingsScreen: React.FC = () => {
         <Modal
           visible={duplicateVisible}
           onDismiss={() => setDuplicateVisible(false)}
+          style={{ bottom: '50%' }}
           contentContainerStyle={{
             backgroundColor: 'white',
             padding: 20,
             margin: 16
           }}
         >
-          <KeyboardAvoidingView behavior="padding">
-            <Headline>Duplicate Course</Headline>
-            <Text style={{ marginVertical: 16 }}>
-              Are you sure you want to duplicate this course?
-            </Text>
-            <Button
-              onPress={() => {
-                setDuplicateVisible(false);
-                onCopyCourse();
-              }}
-            >
-              Duplicate
-            </Button>
-          </KeyboardAvoidingView>
+          <Headline>Duplicate Course</Headline>
+          <Text style={{ marginVertical: 16 }}>
+            Are you sure you want to duplicate this course?
+          </Text>
+          <Button
+            onPress={() => {
+              setDuplicateVisible(false);
+              onCopyCourse();
+            }}
+          >
+            Duplicate
+          </Button>
         </Modal>
         <Modal
           visible={deleteVisible}
           onDismiss={() => setDeleteVisible(false)}
+          style={{ bottom: '50%' }}
           contentContainerStyle={{
             backgroundColor: 'white',
             padding: 20,
             margin: 16
           }}
         >
-          <KeyboardAvoidingView behavior="padding">
-            <Headline>Delete Course</Headline>
-            <Text style={{ marginVertical: 16 }}>
-              Are you sure you want to delete this course? This action cannot be
-              undone.
-            </Text>
-            <Button
-              onPress={() => {
-                setDeleteVisible(false);
-                handleDelete();
-              }}
-            >
-              Delete
-            </Button>
-          </KeyboardAvoidingView>
+          <Headline>Delete Course</Headline>
+          <Text style={{ marginVertical: 16 }}>
+            Are you sure you want to delete this course? This action cannot be
+            undone.
+          </Text>
+          <Button
+            onPress={() => {
+              setDeleteVisible(false);
+              handleDelete();
+            }}
+          >
+            Delete
+          </Button>
         </Modal>
         <Modal
           visible={newCourseVisible}
           onDismiss={() => setNewCourseVisible(false)}
+          style={{ bottom: '50%' }}
           contentContainerStyle={{
             backgroundColor: 'white',
             padding: 20,
             margin: 16
           }}
         >
-          <KeyboardAvoidingView behavior="padding">
-            <Headline>Add a New Course</Headline>
-            <TextInput
-              label="Name"
-              mode="outlined"
-              value={newCourseName}
-              onChangeText={(text) => setNewCourseName(text)}
-              style={{ marginVertical: 16 }}
+          <Headline>Add a New Course</Headline>
+          <TextInput
+            label="Name"
+            mode="outlined"
+            defaultValue={newCourseName}
+            onChangeText={(text) => setNewCourseName(text)}
+            style={{ marginVertical: 16 }}
+          />
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center'
+            }}
+          >
+            <Switch
+              value={newCourseSeed}
+              style={{ marginRight: 8 }}
+              onValueChange={() => setNewCourseSeed((prev) => !prev)}
+              color="#6F5E53"
             />
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center'
-              }}
-            >
-              <Switch
-                value={newCourseSeed}
-                style={{ marginRight: 8 }}
-                onValueChange={() => setNewCourseSeed((prev) => !prev)}
-                color="#6F5E53"
-              />
-              <Text>Fill with Franklin's original virtues</Text>
-            </View>
-            <Button
-              onPress={() => {
-                setNewCourseVisible(false);
-                onAddCourse();
-              }}
-            >
-              Add
-            </Button>
-          </KeyboardAvoidingView>
+            <Text>Fill with Franklin's original virtues</Text>
+          </View>
+          <Button
+            onPress={() => {
+              setNewCourseVisible(false);
+              onAddCourse();
+            }}
+          >
+            Add
+          </Button>
         </Modal>
       </Portal>
       <ScrollView style={{ height: '100%' }}>

@@ -39,7 +39,7 @@ import DraggableFlatList, {
 } from 'react-native-draggable-flatlist';
 
 // Utils
-import { capitalize } from 'lodash';
+import { capitalize, debounce, set } from 'lodash';
 import { AppDispatch, RootState } from '../state/store';
 import { Virtue } from '../api/types';
 
@@ -200,37 +200,37 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
         <Modal
           visible={newVirtueVisible}
           onDismiss={() => setNewVirtueVisible(false)}
+          style={{ bottom: '50%' }}
           contentContainerStyle={{
             backgroundColor: 'white',
             padding: 20,
             margin: 16
           }}
         >
-          <KeyboardAvoidingView behavior="padding">
-            <Headline>New Virtue</Headline>
-            <TextInput
-              label="Name"
-              mode="outlined"
-              value={newVirtueName2}
-              onChangeText={(text) => setNewVirtueName2(text)}
-              style={{ marginVertical: 16 }}
-            />
-            <TextInput
-              label="Tagline"
-              mode="outlined"
-              value={newVirtueTagline2}
-              onChangeText={(text) => setNewVirtueTagline2(text)}
-              style={{ marginVertical: 16 }}
-            />
-            <Button
-              onPress={() => {
-                onNewVirtue();
-                setNewVirtueVisible(false);
-              }}
-            >
-              Add
-            </Button>
-          </KeyboardAvoidingView>
+          <Headline>New Virtue</Headline>
+          <TextInput
+            label="Name"
+            mode="outlined"
+            defaultValue={newVirtueName2}
+            onChangeText={(text) => setNewVirtueName2(text)}
+            style={{ marginVertical: 16 }}
+          />
+          <TextInput
+            label="Tagline"
+            mode="outlined"
+            multiline={true}
+            defaultValue={newVirtueTagline2}
+            onChangeText={(text) => setNewVirtueTagline2(text)}
+            style={{ marginVertical: 16 }}
+          />
+          <Button
+            onPress={() => {
+              onNewVirtue();
+              setNewVirtueVisible(false);
+            }}
+          >
+            Add
+          </Button>
         </Modal>
         <Modal
           visible={visible}
@@ -238,73 +238,73 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
             hideModal();
             setConfirmSure(false);
           }}
+          style={{ bottom: '50%' }}
           contentContainerStyle={{
             backgroundColor: 'white',
             padding: 20,
             margin: 16
           }}
         >
-          <KeyboardAvoidingView behavior="padding">
-            {confirmSure && (
-              <>
-                <Headline>Delete {capitalize(modalVirtue)}?</Headline>
-                <Text>Are you sure you want to delete this virtue?</Text>
+          {confirmSure && (
+            <>
+              <Headline>Delete {capitalize(modalVirtue)}?</Headline>
+              <Text>Are you sure you want to delete this virtue?</Text>
 
+              <Button
+                onPress={() => {
+                  hideModal();
+                  setConfirmSure(false);
+                  onDeleteVirtue(modalVirtue || '');
+                }}
+              >
+                Delete
+              </Button>
+            </>
+          )}
+          {!confirmSure && (
+            <>
+              <Headline>Update Virtue</Headline>
+              <TextInput
+                label="Name"
+                mode="outlined"
+                defaultValue={newVirtueName}
+                onChangeText={(text) => setNewVirtueName(text)}
+                style={{ marginVertical: 16 }}
+              />
+              <TextInput
+                label="Tagline"
+                mode="outlined"
+                multiline={true}
+                defaultValue={newVirtueTagline}
+                onChangeText={(text) => setNewVirtueTagline(text)}
+                style={{ marginVertical: 16 }}
+              />
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between'
+                }}
+              >
                 <Button
                   onPress={() => {
-                    hideModal();
-                    setConfirmSure(false);
-                    onDeleteVirtue(modalVirtue || '');
+                    setConfirmSure(true);
                   }}
                 >
                   Delete
                 </Button>
-              </>
-            )}
-            {!confirmSure && (
-              <>
-                <Headline>Update Virtue</Headline>
-                <TextInput
-                  label="Name"
-                  mode="outlined"
-                  value={newVirtueName}
-                  onChangeText={(text) => setNewVirtueName(text)}
-                  style={{ marginVertical: 16 }}
-                />
-                <TextInput
-                  label="Tagline"
-                  mode="outlined"
-                  value={newVirtueTagline}
-                  onChangeText={(text) => setNewVirtueTagline(text)}
-                  style={{ marginVertical: 16 }}
-                />
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between'
+                <Button
+                  onPress={() => {
+                    hideModal();
+                    setConfirmSure(false);
+                    onChangeVirtue(modalVirtue || '');
                   }}
                 >
-                  <Button
-                    onPress={() => {
-                      setConfirmSure(true);
-                    }}
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    onPress={() => {
-                      hideModal();
-                      setConfirmSure(false);
-                      onChangeVirtue(modalVirtue || '');
-                    }}
-                  >
-                    Update
-                  </Button>
-                </View>
-              </>
-            )}
-          </KeyboardAvoidingView>
+                  Update
+                </Button>
+              </View>
+            </>
+          )}
         </Modal>
       </Portal>
       <DraggableFlatList
