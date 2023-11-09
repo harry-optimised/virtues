@@ -29,10 +29,12 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 // Utils
 import { capitalize } from 'lodash';
 import { AppDispatch } from '../state/store';
+import { useNavigation } from '@react-navigation/native';
 
 const SettingsScreen: React.FC = () => {
   const frames = useSelector(selectAllFrames);
   const dispatch = useDispatch<AppDispatch>();
+  const navigation = useNavigation();
   const [expanded, setExpanded] = React.useState('');
   const [isSwitchOn, setIsSwitchOn] = React.useState(false);
 
@@ -267,20 +269,19 @@ const SettingsScreen: React.FC = () => {
                     left={(props) => <List.Icon {...props} icon="delete" />}
                   />
                 </TouchableOpacity>
-                <List.Accordion
-                  title="Virtues"
-                  description="Tap a virtue to edit"
-                  style={{ backgroundColor: '#f2f2f2' }}
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('EditVirtues', { frameIndex: frame.id })
+                  }
                 >
-                  {Object.keys(frame.data).map((virtue) => (
-                    <List.Item
-                      key={virtue}
-                      title={capitalize(virtue)}
-                      description={frame.data[virtue].tagLine}
-                      left={(props) => <List.Icon {...props} icon="pencil" />}
-                    />
-                  ))}
-                </List.Accordion>
+                  <List.Item
+                    title="Virtues"
+                    description="Manage virtues in this course"
+                    left={(props) => (
+                      <List.Icon {...props} icon="flower-tulip" />
+                    )}
+                  />
+                </TouchableOpacity>
               </View>
             </List.Accordion>
           ))}

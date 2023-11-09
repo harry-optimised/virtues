@@ -10,70 +10,83 @@ export interface ListFramesAPIResponse {
 
 const DEFAULT_FRAME: Frame = {
   id: Math.floor(100000 + Math.random() * 900000).toString(),
-  name: 'Foundations',
+  name: "Franklin's Virtues",
   date: new Date().toISOString(),
   data: {
     temperance: {
       tagLine: 'Eat not to dullness; drink not to elevation.',
-      log: [0, 0, 0, 0, 0, 0, 0]
+      log: [0, 0, 0, 0, 0, 0, 0],
+      order: 1
     },
     silence: {
       tagLine:
         'Speak not but what may benefit others or yourself; avoid trifling conversation.',
-      log: [0, 0, 0, 0, 0, 0, 0]
+      log: [0, 0, 0, 0, 0, 0, 0],
+      order: 2
     },
     order: {
       tagLine:
         'Let all your things have their places; let each part of your business have its time.',
-      log: [0, 0, 0, 0, 0, 0, 0]
+      log: [0, 0, 0, 0, 0, 0, 0],
+      order: 3
     },
     resolution: {
       tagLine:
         'Resolve to perform what you ought; perform without fail what you resolve.',
-      log: [0, 0, 0, 0, 0, 0, 0]
+      log: [0, 0, 0, 0, 0, 0, 0],
+      order: 4
     },
     frugality: {
       tagLine:
         'Make no expense but to do good to others or yourself; that is, waste nothing.',
-      log: [0, 0, 0, 0, 0, 0, 0]
+      log: [0, 0, 0, 0, 0, 0, 0],
+      order: 5
     },
     industry: {
       tagLine:
         'Lose no time; be always employed in something useful; cut off all unnecessary actions.',
-      log: [0, 0, 0, 0, 0, 0, 0]
+      log: [0, 0, 0, 0, 0, 0, 0],
+      order: 6
     },
     sincerity: {
       tagLine:
         'Use no hurtful deceit; think innocently and justly, and, if you speak, speak accordingly.',
-      log: [0, 0, 0, 0, 0, 0, 0]
+      log: [0, 0, 0, 0, 0, 0, 0],
+      order: 7
     },
     justice: {
       tagLine:
         'Wrong none by doing injuries, or omitting the benefits that are your duty.',
-      log: [0, 0, 0, 0, 0, 0, 0]
+      log: [0, 0, 0, 0, 0, 0, 0],
+      order: 8
     },
     moderation: {
       tagLine:
         'Avoid extremes; forbear resenting injuries so much as you think they deserve.',
-      log: [0, 0, 0, 0, 0, 0, 0]
+      log: [0, 0, 0, 0, 0, 0, 0],
+      order: 9
     },
     cleanliness: {
       tagLine: 'Tolerate no uncleanliness in body, clothes, or habitation.',
-      log: [0, 0, 0, 0, 0, 0, 0]
+      log: [0, 0, 0, 0, 0, 0, 0],
+      order: 10
     },
     tranquility: {
       tagLine:
         'Be not disturbed at trifles, or at accidents common or unavoidable.',
-      log: [0, 0, 0, 0, 0, 0, 0]
+      log: [0, 0, 0, 0, 0, 0, 0],
+      order: 11
     },
     chastity: {
       tagLine:
         "Rarely use venery but for health or offspring, never to dullness, weakness, or the injury of your own or another's peace or reputation.",
-      log: [0, 0, 0, 0, 0, 0, 0]
+      log: [0, 0, 0, 0, 0, 0, 0],
+      order: 12
     },
     humility: {
       tagLine: 'Imitate Jesus and Socrates.',
-      log: [0, 0, 0, 0, 0, 0, 0]
+      log: [0, 0, 0, 0, 0, 0, 0],
+      order: 13
     }
   }
 };

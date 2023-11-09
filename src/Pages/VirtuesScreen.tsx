@@ -5,9 +5,7 @@ import { useSelector } from 'react-redux';
 import { selectAllFrames } from '../state/frames';
 
 // UI
-import { Dimensions, View } from 'react-native';
-import { PaperProvider, Card, Text, List } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { PaperProvider, Card, Text } from 'react-native-paper';
 
 // Custom Components
 import Grid from '../Components/Grid';
@@ -41,7 +39,11 @@ const VirtuesScreen: React.FC = () => {
         <Card style={{ borderRadius: 0, minHeight: 96 }}>
           <Card.Content>
             <Text variant="titleLarge">{capitalize(bannerVirtue)}</Text>
-            <Text variant="bodyMedium">{banner.tagLine}</Text>
+            <Text variant="bodyMedium">
+              {banner.tagLine === ''
+                ? 'No description provided, go to Settings to add one.'
+                : banner.tagLine}
+            </Text>
           </Card.Content>
         </Card>
       )}

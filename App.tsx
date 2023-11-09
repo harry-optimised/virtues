@@ -9,18 +9,22 @@ import store, { AppDispatch } from './src/state/store';
 import VirtuesScreen from './src/Pages/VirtuesScreen';
 import SettingsScreen from './src/Pages/SettingsScreen';
 import HelpScreen from './src/Pages/HelpScreen';
+import EditVirtuesScreen from './src/Pages/EditVirtuesScreen';
 
 import { StyleSheet, Text } from 'react-native';
 import { View } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+  createStackNavigator,
+  CardStyleInterpolators
+} from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 //TODO:
-// - Manage virtues by using draggable and swipeable list.
 // - Add setting to do all virtues, one at a time, or all up to current.
 // - Fix date popup in iPhone.
 
@@ -38,15 +42,64 @@ const styles = StyleSheet.create({
 
 export type RootStackParamList = {
   Main: undefined;
-  Profile: undefined;
-  Messages: undefined;
-  MessagesDetail: undefined;
-  Book: undefined;
-  Options: undefined;
-  Search: undefined;
+  EditVirtues: undefined;
 };
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
+
+function BottomTabs(): JSX.Element {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerStyle: styles.header,
+        headerTintColor: 'white',
+        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: '#E2D5CB',
+        tabBarStyle: styles.tabBar
+      }}
+    >
+      <Tab.Screen
+        name="Virtues"
+        component={VirtuesScreen}
+        options={() => ({
+          headerStyle: styles.header,
+          headerTintColor: 'white',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="flower-tulip"
+              color={color}
+              size={size}
+            />
+          )
+        })}
+      />
+
+      <Tab.Screen
+        name="Instructions"
+        component={HelpScreen}
+        options={() => ({
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="book-open-outline"
+              color={color}
+              size={size}
+            />
+          )
+        })}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={() => ({
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="cog" color={color} size={size} />
+          )
+        })}
+      />
+    </Tab.Navigator>
+  );
+}
 
 function ReduxApp(): JSX.Element | null {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -68,66 +121,24 @@ function ReduxApp(): JSX.Element | null {
 
   const appRender = (
     <NavigationContainer>
-      <Tab.Navigator
+      <Stack.Navigator
         screenOptions={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           headerStyle: styles.header,
-          headerTintColor: 'white',
-          tabBarActiveTintColor: 'white',
-          tabBarInactiveTintColor: '#E2D5CB',
-          tabBarStyle: styles.tabBar
+          headerTintColor: 'white'
         }}
       >
-        <Tab.Screen
-          name="Virtues"
-          component={VirtuesScreen}
-          options={() => ({
-            headerStyle: styles.header,
-            headerTintColor: 'white',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons
-                name="flower-tulip"
-                color={color}
-                size={size}
-              />
-            )
-          })}
+        <Stack.Screen
+          name="Main"
+          component={BottomTabs}
+          options={{ headerShown: false }}
         />
-        {/* <Tab.Screen
-          name="Insights"
-          component={InsightsScreen}
-          options={() => ({
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons
-                name="chart-line"
-                color={color}
-                size={size}
-              />
-            )
-          })}
-        /> */}
-        <Tab.Screen
-          name="Instructions"
-          component={HelpScreen}
-          options={() => ({
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons
-                name="book-open-outline"
-                color={color}
-                size={size}
-              />
-            )
-          })}
+        <Stack.Screen
+          name="EditVirtues"
+          component={EditVirtuesScreen}
+          options={{ headerTitle: 'Manage Virtues' }}
         />
-        <Tab.Screen
-          name="Settings"
-          component={SettingsScreen}
-          options={() => ({
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="cog" color={color} size={size} />
-            )
-          })}
-        />
-      </Tab.Navigator>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 

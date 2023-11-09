@@ -8,6 +8,7 @@ export type Frame = {
 export type Virtue = {
   tagLine: string;
   log: number[];
+  order: number;
 };
 
 // TODO: Put this all in one api.ts file.

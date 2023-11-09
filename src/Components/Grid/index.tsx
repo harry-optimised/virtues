@@ -6,12 +6,9 @@ import { updateFrame } from '../../state/frames';
 import { AppDispatch } from '../../state/store';
 
 // UI
-import { View, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 
-import { IconButton, Text, Banner } from 'react-native-paper';
-
-// Styles
-import { sharedStyles } from '../../SharedStyles';
+import { IconButton, Text } from 'react-native-paper';
 
 // Types
 import { Frame } from '../../api/types';
@@ -20,21 +17,6 @@ import { Frame } from '../../api/types';
 import DayCell from '../DayCell';
 import LogCell from '../LogCell';
 import VirtueCell from '../VirtueCell';
-
-const styles = StyleSheet.create({
-  ...sharedStyles,
-  container: {
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'space-between'
-  },
-  row: {
-    flexDirection: 'row',
-    height: 48
-  },
-  head: { height: 40 },
-  text: { margin: 6, textAlign: 'center' }
-});
 
 const HEADER = ['', 'M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
@@ -62,9 +44,19 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
   const [selectedDayIndex, setSelectedDayIndex] = useState(-1);
 
   const data = useMemo(() => {
-    return Object.entries(frame.data).map(([key, values]) => {
-      return [key, ...values.log.map(String)];
+    const qualifiedEntries = Object.entries(frame.data).map(([key, values]) => {
+      return [values.order, key, ...values.log.map(String)];
     });
+
+    const orderedEntries = qualifiedEntries.sort((a, b) => {
+      return a[0] > b[0] ? 1 : -1;
+    });
+
+    const processedEntries = orderedEntries.map((row) => {
+      return row.slice(1);
+    });
+
+    return processedEntries;
   }, [frame]);
 
   const onSelect = useCallback((virtueIndex: number, dayIndex: number) => {
