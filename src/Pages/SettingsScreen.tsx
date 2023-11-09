@@ -11,7 +11,13 @@ import {
 } from '../state/frames';
 
 // UI
-import { SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import {
   Divider,
   List,
@@ -140,22 +146,24 @@ const SettingsScreen: React.FC = () => {
             margin: 16
           }}
         >
-          <Headline>Change Name</Headline>
-          <TextInput
-            label="Name"
-            mode="outlined"
-            value={newName}
-            onChangeText={(text) => setnewName(text)}
-            style={{ marginVertical: 16 }}
-          />
-          <Button
-            onPress={() => {
-              setNewNameVisible(false);
-              handleChangeName();
-            }}
-          >
-            Rename
-          </Button>
+          <KeyboardAvoidingView behavior="padding">
+            <Headline>Change Name</Headline>
+            <TextInput
+              label="Name"
+              mode="outlined"
+              value={newName}
+              onChangeText={(text) => setnewName(text)}
+              style={{ marginVertical: 16 }}
+            />
+            <Button
+              onPress={() => {
+                setNewNameVisible(false);
+                handleChangeName();
+              }}
+            >
+              Rename
+            </Button>
+          </KeyboardAvoidingView>
         </Modal>
         {newStartDateVisible && (
           <DateTimePicker
@@ -174,18 +182,20 @@ const SettingsScreen: React.FC = () => {
             margin: 16
           }}
         >
-          <Headline>Duplicate Course</Headline>
-          <Text style={{ marginVertical: 16 }}>
-            Are you sure you want to duplicate this course?
-          </Text>
-          <Button
-            onPress={() => {
-              setDuplicateVisible(false);
-              onCopyCourse();
-            }}
-          >
-            Duplicate
-          </Button>
+          <KeyboardAvoidingView behavior="padding">
+            <Headline>Duplicate Course</Headline>
+            <Text style={{ marginVertical: 16 }}>
+              Are you sure you want to duplicate this course?
+            </Text>
+            <Button
+              onPress={() => {
+                setDuplicateVisible(false);
+                onCopyCourse();
+              }}
+            >
+              Duplicate
+            </Button>
+          </KeyboardAvoidingView>
         </Modal>
         <Modal
           visible={deleteVisible}
@@ -196,19 +206,21 @@ const SettingsScreen: React.FC = () => {
             margin: 16
           }}
         >
-          <Headline>Delete Course</Headline>
-          <Text style={{ marginVertical: 16 }}>
-            Are you sure you want to delete this course? This action cannot be
-            undone.
-          </Text>
-          <Button
-            onPress={() => {
-              setDeleteVisible(false);
-              handleDelete();
-            }}
-          >
-            Delete
-          </Button>
+          <KeyboardAvoidingView behavior="padding">
+            <Headline>Delete Course</Headline>
+            <Text style={{ marginVertical: 16 }}>
+              Are you sure you want to delete this course? This action cannot be
+              undone.
+            </Text>
+            <Button
+              onPress={() => {
+                setDeleteVisible(false);
+                handleDelete();
+              }}
+            >
+              Delete
+            </Button>
+          </KeyboardAvoidingView>
         </Modal>
         <Modal
           visible={newCourseVisible}
@@ -219,37 +231,39 @@ const SettingsScreen: React.FC = () => {
             margin: 16
           }}
         >
-          <Headline>Add a New Course</Headline>
-          <TextInput
-            label="Name"
-            mode="outlined"
-            value={newCourseName}
-            onChangeText={(text) => setNewCourseName(text)}
-            style={{ marginVertical: 16 }}
-          />
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center'
-            }}
-          >
-            <Switch
-              value={newCourseSeed}
-              style={{ marginRight: 8 }}
-              onValueChange={() => setNewCourseSeed((prev) => !prev)}
-              color="#6F5E53"
+          <KeyboardAvoidingView behavior="padding">
+            <Headline>Add a New Course</Headline>
+            <TextInput
+              label="Name"
+              mode="outlined"
+              value={newCourseName}
+              onChangeText={(text) => setNewCourseName(text)}
+              style={{ marginVertical: 16 }}
             />
-            <Text>Fill with Franklin's original virtues</Text>
-          </View>
-          <Button
-            onPress={() => {
-              setNewCourseVisible(false);
-              onAddCourse();
-            }}
-          >
-            Add
-          </Button>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center'
+              }}
+            >
+              <Switch
+                value={newCourseSeed}
+                style={{ marginRight: 8 }}
+                onValueChange={() => setNewCourseSeed((prev) => !prev)}
+                color="#6F5E53"
+              />
+              <Text>Fill with Franklin's original virtues</Text>
+            </View>
+            <Button
+              onPress={() => {
+                setNewCourseVisible(false);
+                onAddCourse();
+              }}
+            >
+              Add
+            </Button>
+          </KeyboardAvoidingView>
         </Modal>
       </Portal>
       <ScrollView style={{ height: '100%' }}>

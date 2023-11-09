@@ -135,7 +135,7 @@ function ReduxApp(): JSX.Element | null {
         <Stack.Screen
           name="EditVirtues"
           component={EditVirtuesScreen}
-          options={{ headerTitle: 'Manage Virtues' }}
+          options={{ headerTitle: 'Manage Virtues', headerBackTitle: '' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
