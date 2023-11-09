@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useState, ReactElement } from 'react';
+import React, {
+  useCallback,
+  useMemo,
+  useState,
+  ReactElement,
+  useEffect
+} from 'react';
 
 // Redux
 import { useDispatch } from 'react-redux';
@@ -59,12 +65,19 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
     return processedEntries;
   }, [frame]);
 
+  console.log(frame);
+
   const onSelect = useCallback((virtueIndex: number, dayIndex: number) => {
     const virtue = dayIndex === 0 ? Object.keys(frame.data)[virtueIndex] : '';
     setBanner(virtue);
     setSelectedVirtueIndex(virtueIndex);
     setSelectedDayIndex(dayIndex);
   }, []);
+
+  useEffect(() => {
+    setSelectedDayIndex(currentDayIndex);
+    setSelectedVirtueIndex(currentVirtueIndex);
+  }, [currentDayIndex, currentVirtueIndex]);
 
   const onLog = useCallback(
     (action: string) => {
@@ -99,7 +112,7 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
   );
 
   return (
-    <View>
+    <View style={{ height: '100%' }}>
       <View
         style={{
           display: 'flex',
@@ -111,6 +124,7 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
         <IconButton
           icon="chevron-left"
           size={32}
+          iconColor="#6F5E53"
           onPress={() => moveIndex('left')}
         />
         <Text
@@ -119,7 +133,8 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
             fontSize: 24,
             marginTop: 8,
             marginBottom: 8,
-            marginHorizontal: 16
+            marginHorizontal: 16,
+            color: '#6F5E53'
           }}
         >
           {frame.name}
@@ -127,6 +142,7 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
         <IconButton
           icon="chevron-right"
           size={32}
+          iconColor="#6F5E53"
           onPress={() => moveIndex('right')}
         />
       </View>
@@ -197,7 +213,7 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
 
       <View
         style={{
-          bottom: 64,
+          bottom: 8,
           right: 8,
           display: 'flex',
           flexDirection: 'row',

@@ -135,7 +135,7 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
       ...frame.data,
       [newVirtueName2]: {
         tagLine: newVirtueTagline2,
-        order: Object.keys(frame.data).length,
+        order: Object.keys(frame.data).length + 1,
         log: [0, 0, 0, 0, 0, 0, 0]
       }
     };
@@ -243,6 +243,7 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
               <Button
                 onPress={() => {
                   hideModal();
+                  setConfirmSure(false);
                   onDeleteVirtue(modalVirtue || '');
                 }}
               >
@@ -284,6 +285,7 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
                 <Button
                   onPress={() => {
                     hideModal();
+                    setConfirmSure(false);
                     onChangeVirtue(modalVirtue || '');
                   }}
                 >

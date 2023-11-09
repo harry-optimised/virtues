@@ -128,12 +128,18 @@ export const duplicateFrame = createAsyncThunk(
 
 export const createFrame = createAsyncThunk(
   'frame/createFrame',
-  async ({ name }: { name: string }, {}) => {
-    const newFrame = {
-      ...DEFAULT_FRAME,
-      name: name,
-      date: new Date().toISOString()
-    };
+  async ({ name, seed }: { name: string; seed: boolean }, {}) => {
+    const newFrame = seed
+      ? {
+          ...DEFAULT_FRAME,
+          name: name,
+          date: new Date().toISOString()
+        }
+      : {
+          name: name,
+          date: new Date().toISOString(),
+          data: {}
+        };
 
     const frame = await postFrame(newFrame);
     return frame;

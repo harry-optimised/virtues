@@ -53,8 +53,14 @@ const SettingsScreen: React.FC = () => {
 
   const [newCourseVisible, setNewCourseVisible] = React.useState(false);
   const [newCourseName, setNewCourseName] = React.useState('');
+  const [newCourseSeed, setNewCourseSeed] = React.useState(true);
 
   const [value, setValue] = React.useState('');
+
+  const reset = useCallback(() => {
+    setNewCourseName('');
+    setNewCourseSeed(true);
+  }, []);
 
   useEffect(() => {
     const getData = async () => {
@@ -113,8 +119,9 @@ const SettingsScreen: React.FC = () => {
   }, []);
 
   const onAddCourse = useCallback(() => {
-    dispatch(createFrame({ name: newCourseName }));
-  }, [newCourseName]);
+    if (!newCourseName) return;
+    dispatch(createFrame({ name: newCourseName, seed: newCourseSeed }));
+  }, [newCourseName, newCourseSeed]);
 
   const onCopyCourse = useCallback(() => {
     const current = frames.findIndex((frame) => frame.id === expanded);
@@ -220,6 +227,21 @@ const SettingsScreen: React.FC = () => {
             onChangeText={(text) => setNewCourseName(text)}
             style={{ marginVertical: 16 }}
           />
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center'
+            }}
+          >
+            <Switch
+              value={newCourseSeed}
+              style={{ marginRight: 8 }}
+              onValueChange={() => setNewCourseSeed((prev) => !prev)}
+              color="#6F5E53"
+            />
+            <Text>Fill with Franklin's original virtues</Text>
+          </View>
           <Button
             onPress={() => {
               setNewCourseVisible(false);
@@ -347,7 +369,7 @@ const SettingsScreen: React.FC = () => {
                   }
                 >
                   <List.Item
-                    title="Virtues"
+                    title={`Virtues (${Object.keys(frame.data).length})`}
                     description="Manage virtues in this course"
                     left={(props) => (
                       <List.Icon {...props} icon="flower-tulip" />
