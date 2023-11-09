@@ -8,6 +8,75 @@ import { Frame } from '../api/types';
 import { RootState } from './store';
 import { listFrames, putFrame, postFrame, destroyFrame } from '../api';
 
+const DEFAULT_FRAME: Omit<Frame, 'id'> = {
+  name: 'Default',
+  date: new Date().toISOString(),
+  data: {
+    temperance: {
+      tagLine: 'Eat not to dullness; drink not to elevation.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    silence: {
+      tagLine:
+        'Speak not but what may benefit others or yourself; avoid trifling conversation.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    order: {
+      tagLine:
+        'Let all your things have their places; let each part of your business have its time.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    resolution: {
+      tagLine:
+        'Resolve to perform what you ought; perform without fail what you resolve.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    frugality: {
+      tagLine:
+        'Make no expense but to do good to others or yourself; that is, waste nothing.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    industry: {
+      tagLine:
+        'Lose no time; be always employed in something useful; cut off all unnecessary actions.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    sincerity: {
+      tagLine:
+        'Use no hurtful deceit; think innocently and justly, and, if you speak, speak accordingly.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    justice: {
+      tagLine:
+        'Wrong none by doing injuries, or omitting the benefits that are your duty.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    moderation: {
+      tagLine:
+        'Avoid extremes; forbear resenting injuries so much as you think they deserve.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    cleanliness: {
+      tagLine: 'Tolerate no uncleanliness in body, clothes, or habitation.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    tranquility: {
+      tagLine:
+        'Be not disturbed at trifles, or at accidents common or unavoidable.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    chastity: {
+      tagLine:
+        "Rarely use venery but for health or offspring, never to dullness, weakness, or the injury of your own or another's peace or reputation.",
+      log: [0, 0, 0, 0, 0, 0, 0]
+    },
+    humility: {
+      tagLine: 'Imitate Jesus and Socrates.',
+      log: [0, 0, 0, 0, 0, 0, 0]
+    }
+  }
+};
+
 export const fetchFrames = createAsyncThunk('frames/fetch', async () => {
   const response = await listFrames();
   return response.results;
@@ -22,14 +91,42 @@ export const duplicateFrame = createAsyncThunk(
     if (existingFrame) {
       const newFrame = {
         ...existingFrame,
-        id: Math.random().toString(36),
         name: `${existingFrame.name} (copy)`,
-        date: new Date().toISOString() // Ensure the new date is ISO format
+        date: new Date().toISOString()
       };
+
+      for (const key in newFrame.data) {
+        if (Object.prototype.hasOwnProperty.call(newFrame.data, key)) {
+          newFrame.data[key].log = [0, 0, 0, 0, 0, 0, 0];
+        }
+      }
+
       await postFrame(newFrame);
       return newFrame;
     }
     throw new Error('Frame not found');
+  }
+);
+
+export const createFrame = createAsyncThunk(
+  'frame/createFrame',
+  async ({ name }: { name: string }, {}) => {
+    const newFrame = {
+      ...DEFAULT_FRAME,
+      name: name,
+      date: new Date().toISOString()
+    };
+
+    const frame = await postFrame(newFrame);
+    return frame;
+  }
+);
+
+export const updateFrame = createAsyncThunk(
+  'frame/updateFrame',
+  async (frame: Frame, {}) => {
+    await putFrame(frame);
+    return { changes: frame, id: frame.id };
   }
 );
 
@@ -41,7 +138,6 @@ export const framesSlice = createSlice({
   name: 'frames',
   initialState: framesAdapter.getInitialState(),
   reducers: {
-    updateFrame: framesAdapter.updateOne,
     deleteFrame: framesAdapter.removeOne
   },
   extraReducers: (builder) => {
@@ -51,6 +147,12 @@ export const framesSlice = createSlice({
       })
       .addCase(duplicateFrame.fulfilled, (state, action) => {
         framesAdapter.addOne(state, action.payload);
+      })
+      .addCase(createFrame.fulfilled, (state, action) => {
+        framesAdapter.addOne(state, action.payload);
+      })
+      .addCase(updateFrame.fulfilled, (state, action) => {
+        framesAdapter.updateOne(state, action.payload);
       });
   }
 });
@@ -59,14 +161,6 @@ export default framesSlice.reducer;
 
 export const { selectAll: selectAllFrames } = framesAdapter.getSelectors(
   (state: RootState) => state.appointments
-);
-
-export const updateFrame = createAsyncThunk(
-  'frame/updateFrame',
-  async (frame: Frame, { dispatch }) => {
-    dispatch(framesSlice.actions.updateFrame({ changes: frame, id: frame.id }));
-    await putFrame(frame);
-  }
 );
 
 export const deleteFrame = createAsyncThunk(

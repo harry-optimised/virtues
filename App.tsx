@@ -22,10 +22,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#5D3754'
+    backgroundColor: '#6F5E53'
   },
   tabBar: {
-    backgroundColor: '#5D3754',
+    backgroundColor: '#6F5E53',
     paddingBottom: 4,
     paddingTop: 8,
     height: 60
@@ -69,7 +69,7 @@ function ReduxApp(): JSX.Element | null {
           headerStyle: styles.header,
           headerTintColor: 'white',
           tabBarActiveTintColor: 'white',
-          tabBarInactiveTintColor: '#E8D8E5',
+          tabBarInactiveTintColor: '#E2D5CB',
           tabBarStyle: styles.tabBar
         }}
       >

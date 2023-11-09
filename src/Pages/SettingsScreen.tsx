@@ -6,7 +6,8 @@ import {
   selectAllFrames,
   updateFrame,
   duplicateFrame,
-  deleteFrame
+  deleteFrame,
+  createFrame
 } from '../state/frames';
 
 // UI
@@ -20,7 +21,8 @@ import {
   Text,
   Modal,
   Button,
-  TextInput
+  TextInput,
+  Headline
 } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -42,6 +44,9 @@ const SettingsScreen: React.FC = () => {
 
   const [duplicateVisible, setDuplicateVisible] = React.useState(false);
   const [deleteVisible, setDeleteVisible] = React.useState(false);
+
+  const [newCourseVisible, setNewCourseVisible] = React.useState(false);
+  const [newCourseName, setNewCourseName] = React.useState('');
 
   const handlePress = useCallback((id: string) => {
     setExpanded((prev) => (prev === id ? '' : id));
@@ -80,8 +85,8 @@ const SettingsScreen: React.FC = () => {
   }, []);
 
   const onAddCourse = useCallback(() => {
-    console.log('add course');
-  }, []);
+    dispatch(createFrame({ name: newCourseName }));
+  }, [newCourseName]);
 
   const onCopyCourse = useCallback(() => {
     const current = frames.findIndex((frame) => frame.id === expanded);
@@ -100,11 +105,13 @@ const SettingsScreen: React.FC = () => {
             margin: 16
           }}
         >
+          <Headline>Change Name</Headline>
           <TextInput
             label="Name"
             mode="outlined"
             value={newName}
             onChangeText={(text) => setnewName(text)}
+            style={{ marginVertical: 16 }}
           />
           <Button
             onPress={() => {
@@ -132,7 +139,10 @@ const SettingsScreen: React.FC = () => {
             margin: 16
           }}
         >
-          <Text>Are you sure you want to duplicate this course?</Text>
+          <Headline>Duplicate Course</Headline>
+          <Text style={{ marginVertical: 16 }}>
+            Are you sure you want to duplicate this course?
+          </Text>
           <Button
             onPress={() => {
               setDuplicateVisible(false);
@@ -151,7 +161,11 @@ const SettingsScreen: React.FC = () => {
             margin: 16
           }}
         >
-          <Text>Are you sure you want to delete this course?</Text>
+          <Headline>Delete Course</Headline>
+          <Text style={{ marginVertical: 16 }}>
+            Are you sure you want to delete this course? This action cannot be
+            undone.
+          </Text>
           <Button
             onPress={() => {
               setDeleteVisible(false);
@@ -159,6 +173,32 @@ const SettingsScreen: React.FC = () => {
             }}
           >
             Delete
+          </Button>
+        </Modal>
+        <Modal
+          visible={newCourseVisible}
+          onDismiss={() => setNewCourseVisible(false)}
+          contentContainerStyle={{
+            backgroundColor: 'white',
+            padding: 20,
+            margin: 16
+          }}
+        >
+          <Headline>Add a New Course</Headline>
+          <TextInput
+            label="Name"
+            mode="outlined"
+            value={newCourseName}
+            onChangeText={(text) => setNewCourseName(text)}
+            style={{ marginVertical: 16 }}
+          />
+          <Button
+            onPress={() => {
+              setNewCourseVisible(false);
+              onAddCourse();
+            }}
+          >
+            Add
           </Button>
         </Modal>
       </Portal>
@@ -176,7 +216,7 @@ const SettingsScreen: React.FC = () => {
             <Switch
               value={isSwitchOn}
               onValueChange={onToggleSwitch}
-              color="#5D3754"
+              color="#6F5E53"
               disabled={true}
             />
           </Text>
@@ -244,7 +284,7 @@ const SettingsScreen: React.FC = () => {
               </View>
             </List.Accordion>
           ))}
-          <TouchableOpacity onPress={onAddCourse}>
+          <TouchableOpacity onPress={() => setNewCourseVisible(true)}>
             <List.Item
               title="Add course"
               left={(props) => <List.Icon {...props} icon="plus" />}
