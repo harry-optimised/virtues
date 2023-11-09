@@ -66,6 +66,13 @@ const SettingsScreen: React.FC = () => {
   const reset = useCallback(() => {
     setNewCourseName('');
     setNewCourseSeed(true);
+    setNewStartDate(new Date());
+    setnewName('');
+    setIsSwitchOn(false);
+    setDeleteVisible(false);
+    setDuplicateVisible(false);
+    setNewCourseVisible(false);
+    setNewNameVisible(false);
   }, []);
 
   useEffect(() => {
@@ -95,6 +102,7 @@ const SettingsScreen: React.FC = () => {
   const handleDelete = useCallback(() => {
     const current = frames.findIndex((frame) => frame.id === expanded);
     dispatch(deleteFrame(frames[current]));
+    reset();
   }, [frames, expanded]);
 
   const handleChangeName = useCallback(() => {
@@ -106,6 +114,7 @@ const SettingsScreen: React.FC = () => {
         name: newName
       })
     );
+    reset();
   }, [newName]);
 
   const setStartDate = useCallback((event, selectedDate) => {
@@ -117,7 +126,7 @@ const SettingsScreen: React.FC = () => {
         date: selectedDate.toISOString()
       })
     );
-    setNewStartDateVisible(false);
+    reset();
   }, []);
 
   const onToggleSwitch = useCallback(() => {
@@ -127,11 +136,13 @@ const SettingsScreen: React.FC = () => {
   const onAddCourse = useCallback(() => {
     if (!newCourseName) return;
     dispatch(createFrame({ name: newCourseName, seed: newCourseSeed }));
+    reset();
   }, [newCourseName, newCourseSeed]);
 
   const onCopyCourse = useCallback(() => {
     const current = frames.findIndex((frame) => frame.id === expanded);
     dispatch(duplicateFrame({ id: frames[current].id }));
+    reset();
   }, [frames, expanded]);
 
   return (
