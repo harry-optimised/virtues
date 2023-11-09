@@ -25,7 +25,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 //TODO:
-// - Add setting to do all virtues, one at a time, or all up to current.
 // - Fix date popup in iPhone.
 
 const styles = StyleSheet.create({

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +11,7 @@ import {
 } from '../state/frames';
 
 // UI
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
 import {
   Divider,
   List,
@@ -22,10 +22,14 @@ import {
   Modal,
   Button,
   TextInput,
-  Headline
+  Headline,
+  SegmentedButtons,
+  Tooltip,
+  RadioButton
 } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // Utils
 import { capitalize } from 'lodash';
 import { AppDispatch } from '../state/store';
@@ -49,6 +53,28 @@ const SettingsScreen: React.FC = () => {
 
   const [newCourseVisible, setNewCourseVisible] = React.useState(false);
   const [newCourseName, setNewCourseName] = React.useState('');
+
+  const [value, setValue] = React.useState('');
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const value = await AsyncStorage.getItem('active');
+        if (value !== null) {
+          setValue(value);
+        }
+      } catch (e) {
+        // error reading value
+      }
+    };
+
+    getData();
+  }, []);
+
+  const onRadioChange = useCallback((newValue) => {
+    setValue(newValue);
+    AsyncStorage.setItem('active', newValue);
+  }, []);
 
   const handlePress = useCallback((id: string) => {
     setExpanded((prev) => (prev === id ? '' : id));
@@ -211,7 +237,7 @@ const SettingsScreen: React.FC = () => {
             flexDirection: 'row',
             alignItems: 'center',
             padding: 8,
-            marginVertical: 16
+            marginTop: 16
           }}
         >
           <Text>
@@ -226,6 +252,52 @@ const SettingsScreen: React.FC = () => {
             Enable syncing of data to remote server
           </Text>
         </View>
+
+        {/* <View style={{ padding: 8 }}>
+          <Text>
+            How many virtues do you want active at the same time? Whilst you can
+            always log entries on any virtue at any time, this option will that
+            clearer visually.
+          </Text>
+          <RadioButton.Group
+            onValueChange={(newValue) => onRadioChange(newValue)}
+            value={value}
+          >
+            <View
+              style={{
+                paddingTop: 8,
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center'
+              }}
+            >
+              <RadioButton value="one" />
+              <Text>One virtue at a time</Text>
+            </View>
+            <View
+              style={{
+                paddingTop: 8,
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center'
+              }}
+            >
+              <RadioButton value="cumulative" />
+              <Text>Virtues accumulate as you progress</Text>
+            </View>
+            <View
+              style={{
+                paddingTop: 8,
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center'
+              }}
+            >
+              <RadioButton value="all" />
+              <Text>All virtues active at the same time</Text>
+            </View>
+          </RadioButton.Group>
+        </View> */}
         <Divider />
 
         <List.Section title="Manage Courses">
