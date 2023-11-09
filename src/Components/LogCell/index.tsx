@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions
+} from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'; // Replace with the correct import path
 import { Virtue } from '../../api/types';
 
@@ -18,7 +24,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   elementContainer: {
-    height: '100%',
+    height: 48,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -55,6 +61,7 @@ const LogCell: React.FC<VirtueElementProps> = ({
   selected,
   value
 }) => {
+  const width = Dimensions.get('window').width;
   let renderedValue = null;
 
   if (value > 0 && value <= 6) {
@@ -69,7 +76,8 @@ const LogCell: React.FC<VirtueElementProps> = ({
         styles.elementContainer,
         {
           backgroundColor: highlighted ? '#F1E9E4' : 'white',
-          borderWidth: selected ? 3 : 0
+          borderWidth: selected ? 3 : 0.25,
+          width: width / 9
         }
       ]}
     >

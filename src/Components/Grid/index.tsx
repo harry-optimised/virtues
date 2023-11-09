@@ -9,7 +9,6 @@ import { AppDispatch } from '../../state/store';
 import { View, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { IconButton, Text } from 'react-native-paper';
-import { Table, TableWrapper, Cell } from 'react-native-reanimated-table';
 
 // Styles
 import { sharedStyles } from '../../SharedStyles';
@@ -138,59 +137,55 @@ function Grid({ frame, moveIndex }: GridProps): ReactElement {
       </View>
 
       <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
-        <Table borderStyle={{ borderWidth: 1 }}>
-          <TableWrapper key={0} style={styles.row}>
-            {HEADER.map((day, dayIndex) => {
-              return (
-                <Cell
-                  style={{ flex: dayIndex === 0 ? 2 : 1 }}
+        <View style={{ display: 'flex', flexDirection: 'row' }}>
+          {HEADER.map((day, dayIndex) =>
+            dayIndex > 0 ? (
+              <DayCell
+                key={dayIndex}
+                day={day}
+                highlighted={dayIndex === currentDayIndex}
+              />
+            ) : (
+              <VirtueCell key={dayIndex} virtue={''} highlighted={false} />
+            )
+          )}
+        </View>
+
+        {data.map((row, virtueIndex) => (
+          <View
+            key={virtueIndex}
+            style={{ display: 'flex', flexDirection: 'row' }}
+          >
+            {row.map((content, dayIndex) =>
+              dayIndex > 0 ? (
+                <TouchableOpacity
                   key={dayIndex}
-                  data={
-                    <DayCell
-                      day={day}
-                      highlighted={dayIndex === currentDayIndex}
-                    />
-                  }
-                />
-              );
-            })}
-          </TableWrapper>
-          {data.map((row, virtueIndex) => (
-            <TableWrapper key={virtueIndex} style={styles.row}>
-              {row.map((content, dayIndex) => (
-                <Cell
-                  style={{ flex: dayIndex === 0 ? 2 : 1 }}
+                  onPress={() => onSelect(virtueIndex, dayIndex)}
+                >
+                  <LogCell
+                    value={Number(content)}
+                    selected={
+                      selectedDayIndex === dayIndex &&
+                      selectedVirtueIndex === virtueIndex
+                    }
+                    highlighted={
+                      dayIndex === currentDayIndex ||
+                      virtueIndex === currentVirtueIndex
+                    }
+                  />
+                </TouchableOpacity>
+              ) : (
+                <VirtueCell
                   key={dayIndex}
-                  data={
-                    dayIndex > 0 ? (
-                      <TouchableOpacity
-                        onPress={() => onSelect(virtueIndex, dayIndex)}
-                      >
-                        <LogCell
-                          value={Number(content)}
-                          selected={
-                            selectedDayIndex === dayIndex &&
-                            selectedVirtueIndex === virtueIndex
-                          }
-                          highlighted={
-                            dayIndex === currentDayIndex ||
-                            virtueIndex === currentVirtueIndex
-                          }
-                        />
-                      </TouchableOpacity>
-                    ) : (
-                      <VirtueCell
-                        virtue={content}
-                        highlighted={virtueIndex === currentVirtueIndex}
-                      />
-                    )
-                  }
+                  virtue={content}
+                  highlighted={virtueIndex === currentVirtueIndex}
                 />
-              ))}
-            </TableWrapper>
-          ))}
-        </Table>
+              )
+            )}
+          </View>
+        ))}
       </ScrollView>
+
       <View
         style={{
           bottom: 64,
