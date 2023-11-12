@@ -1,6 +1,11 @@
-import React from 'react';
+import React from "react";
+
+// UI
 import { View, StyleSheet, Dimensions } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Text, useTheme, MD3Theme } from 'react-native-paper';
+
+// Utils
+import { capitalize } from 'lodash';
 
 type VirtueCellProps = {
   virtue: string;
@@ -8,38 +13,49 @@ type VirtueCellProps = {
   selected: boolean;
 };
 
-const styles = StyleSheet.create({
-  container: {
-    height: 48,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    borderWidth: 0.25,
-    borderColor: '#6F5E53'
-  },
-  text: {
-    textAlign: 'center'
-  }
-});
+export const createStyles = (theme: MD3Theme) =>
+  StyleSheet.create({
+    container: {
+      height: 48,
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      borderWidth: 0.25,
+      borderColor: theme.colors.primary,
+      backgroundColor: theme.colors.background
+    },
+    text: {
+      textAlign: 'center'
+    },
+    selected: {
+      borderWidth: 3
+    },
+    highlighted: {
+      backgroundColor: theme.colors.secondary
+    }
+  });
 
 const VirtueCell: React.FC<VirtueCellProps> = ({
   virtue,
   highlighted,
   selected
 }) => {
-  // Function to capitalize the first letter of the string
-  const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-  const width = Dimensions.get('window').width;
+  
+  // Theme
+  const theme = useTheme();
+  const styles = createStyles(theme);
+  
+  const width = Dimensions.get('window').width;  
+  const widthStyle = { width: 2 * (width / 9) };
 
   return (
     <View
+      testID="virtue-cell"
       style={[
         styles.container,
-        {
-          width: 2 * (width / 9),
-          backgroundColor: highlighted ? '#F1E9E4' : 'white',
-          borderWidth: selected ? 3 : 0.25
-        }
+        selected ? styles.selected : null,
+        highlighted ? styles.highlighted : null,
+        widthStyle
       ]}
     >
       <Text variant="labelMedium" style={styles.text}>

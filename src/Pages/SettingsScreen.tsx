@@ -21,7 +21,6 @@ import {
 import {
   Divider,
   List,
-  PaperProvider,
   Portal,
   Switch,
   Text,
@@ -146,7 +145,7 @@ const SettingsScreen: React.FC = () => {
   }, [frames, expanded]);
 
   return (
-    <PaperProvider>
+    <>
       <Portal>
         <Modal
           visible={newNameVisible}
@@ -408,7 +407,7 @@ const SettingsScreen: React.FC = () => {
           </TouchableOpacity>
         </List.Section>
       </ScrollView>
-    </PaperProvider>
+    </>
   );
 };
 

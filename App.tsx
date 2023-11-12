@@ -11,9 +11,12 @@ import SettingsScreen from './src/Pages/SettingsScreen';
 import HelpScreen from './src/Pages/HelpScreen';
 import EditVirtuesScreen from './src/Pages/EditVirtuesScreen';
 
+// UI
 import { StyleSheet, Text } from 'react-native';
 import { View } from 'react-native';
+import { PaperProvider, MD3LightTheme } from 'react-native-paper';
 
+// Navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
@@ -144,12 +147,24 @@ function ReduxApp(): JSX.Element | null {
   return appIsReady ? appRender : loadingScreenRender;
 }
 
+const theme = {
+  ...MD3LightTheme,
+  colors: {
+    ...MD3LightTheme.colors,
+    primary: '#6F5E53',
+    secondary: '#F1E9E4',
+    background: '#FFFFFF'
+  },
+};
+
 function App(): JSX.Element {
   return (
     <Provider store={store}>
-      <SafeAreaProvider>
-        <ReduxApp />
-      </SafeAreaProvider>
+      <PaperProvider theme={theme}>
+        <SafeAreaProvider>
+          <ReduxApp />
+        </SafeAreaProvider>
+      </PaperProvider>
     </Provider>
   );
 }

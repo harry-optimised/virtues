@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { selectAllFrames } from '../state/frames';
 
 // UI
-import { PaperProvider, Card, Text } from 'react-native-paper';
+import { Card, Text } from 'react-native-paper';
 
 // Custom Components
 import Grid from '../Components/Grid';
@@ -34,7 +34,7 @@ const VirtuesScreen: React.FC = () => {
   const banner = frame ? frame.data[bannerVirtue as ValidKey] : '';
 
   return (
-    <PaperProvider>
+    <>
       {banner && (
         <Card style={{ borderRadius: 0, minHeight: 96 }}>
           <Card.Content>
@@ -54,7 +54,7 @@ const VirtuesScreen: React.FC = () => {
           setBanner={setBannerVirtue}
         />
       )}
-    </PaperProvider>
+    </>
   );
 };
 

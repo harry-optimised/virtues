@@ -3,6 +3,8 @@
   "include": ["src/**/*", "App.tsx"],
   "compilerOptions": {
     "moduleResolution": "node",
-    "jsx": "react-native"
+    "jsx": "react-native",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   }
 }

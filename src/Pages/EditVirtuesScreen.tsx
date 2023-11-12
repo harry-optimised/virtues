@@ -22,7 +22,6 @@ import {
 import {
   Divider,
   List,
-  PaperProvider,
   Portal,
   Switch,
   Text,
@@ -195,7 +194,7 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
   };
 
   return (
-    <PaperProvider>
+    <>
       <Portal>
         <Modal
           visible={newVirtueVisible}
@@ -331,7 +330,7 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
           onPress={() => setNewVirtueVisible(true)}
         />
       </View>
-    </PaperProvider>
+    </>
   );
 };
 
