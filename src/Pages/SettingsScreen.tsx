@@ -16,7 +16,8 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
-  View
+  View,
+  Platform
 } from 'react-native';
 import {
   Divider,
@@ -43,6 +44,7 @@ import { useNavigation } from '@react-navigation/native';
 const SettingsScreen: React.FC = () => {
   const frames = useSelector(selectAllFrames);
   const dispatch = useDispatch<AppDispatch>();
+
   const navigation = useNavigation();
   const [expanded, setExpanded] = React.useState('');
   const [isSwitchOn, setIsSwitchOn] = React.useState(false);
@@ -65,13 +67,13 @@ const SettingsScreen: React.FC = () => {
   const reset = useCallback(() => {
     setNewCourseName('');
     setNewCourseSeed(true);
-    setNewStartDate(new Date());
     setnewName('');
     setIsSwitchOn(false);
     setDeleteVisible(false);
     setDuplicateVisible(false);
     setNewCourseVisible(false);
     setNewNameVisible(false);
+    setNewStartDateVisible(false);
   }, []);
 
   useEffect(() => {
@@ -118,7 +120,7 @@ const SettingsScreen: React.FC = () => {
 
   const setStartDate = useCallback((event, selectedDate) => {
     const current = frames.findIndex((frame) => frame.id === expanded);
-
+    setNewStartDate(selectedDate);
     dispatch(
       updateFrame({
         ...frames[current],
@@ -126,7 +128,7 @@ const SettingsScreen: React.FC = () => {
       })
     );
     reset();
-  }, []);
+  }, [frames, expanded]);
 
   const onToggleSwitch = useCallback(() => {
     setIsSwitchOn((prev) => !prev);
@@ -143,6 +145,39 @@ const SettingsScreen: React.FC = () => {
     dispatch(duplicateFrame({ id: frames[current].id }));
     reset();
   }, [frames, expanded]);
+
+  const iOSDatePicker = (
+    <Modal
+      visible={newStartDateVisible}
+      onDismiss={() => setNewStartDateVisible(false)}
+      contentContainerStyle={{
+        backgroundColor: 'white',
+        padding: 16,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start'
+      }}
+    >
+      <Headline>Change Start Date</Headline>
+      <DateTimePicker
+        display='inline'
+        style={{ marginTop: 16, marginHorizontal: 0, paddingHorizontal: 0 }}
+        testID="dateTimePicker"
+        value={newStartDate}
+        mode="date"
+        onChange={setStartDate}
+      />
+    </Modal>
+  )
+
+  const androidDatePicker = (
+    <DateTimePicker
+            testID="dateTimePicker"
+            value={newStartDate}
+            mode="date"
+            onChange={setStartDate}
+          />
+  )
 
   return (
     <>
@@ -175,12 +210,7 @@ const SettingsScreen: React.FC = () => {
           </Button>
         </Modal>
         {newStartDateVisible && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={newStartDate}
-            mode="date"
-            onChange={setStartDate}
-          />
+          Platform.OS === 'ios' ? iOSDatePicker : androidDatePicker          
         )}
         <Modal
           visible={duplicateVisible}

@@ -20,7 +20,6 @@ import { IconButton, Text } from 'react-native-paper';
 import { Frame } from '../../api/types';
 
 // Custom Components
-import DayCell from '../DayCell';
 import LogCell from '../LogCell';
 import VirtueCell from '../VirtueCell';
 import TableHeader from './TableHeader';
@@ -64,8 +63,6 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
 
     return processedEntries;
   }, [frame]);
-
-  console.log(frame);
 
   const onSelect = useCallback((virtueIndex: number, dayIndex: number) => {
     const virtue = dayIndex === 0 ? Object.keys(frame.data)[virtueIndex] : '';
