@@ -147,7 +147,7 @@ function ReduxApp(): JSX.Element | null {
   return appIsReady ? appRender : loadingScreenRender;
 }
 
-const theme = {
+export const theme = {
   ...MD3LightTheme,
   colors: {
     ...MD3LightTheme.colors,

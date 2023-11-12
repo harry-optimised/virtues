@@ -2,10 +2,12 @@ import React from "react";
 
 // UI
 import { View, StyleSheet, Dimensions } from 'react-native';
-import { Text, useTheme, MD3Theme } from 'react-native-paper';
+import { Text } from 'react-native-paper';
+import THEME from '../../theme';
 
 // Utils
 import { capitalize } from 'lodash';
+
 
 type VirtueCellProps = {
   virtue: string;
@@ -13,16 +15,15 @@ type VirtueCellProps = {
   selected: boolean;
 };
 
-export const createStyles = (theme: MD3Theme) =>
-  StyleSheet.create({
+export const styles =  StyleSheet.create({
     container: {
       height: 48,
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
       borderWidth: 0.25,
-      borderColor: theme.colors.primary,
-      backgroundColor: theme.colors.background
+      borderColor: THEME.colors.primary,
+      backgroundColor: THEME.colors.background
     },
     text: {
       textAlign: 'center'
@@ -31,19 +32,15 @@ export const createStyles = (theme: MD3Theme) =>
       borderWidth: 3
     },
     highlighted: {
-      backgroundColor: theme.colors.secondary
+      backgroundColor: THEME.colors.secondary
     }
-  });
+});
 
 const VirtueCell: React.FC<VirtueCellProps> = ({
   virtue,
   highlighted,
   selected
 }) => {
-  
-  // Theme
-  const theme = useTheme();
-  const styles = createStyles(theme);
   
   const width = Dimensions.get('window').width;  
   const widthStyle = { width: 2 * (width / 9) };

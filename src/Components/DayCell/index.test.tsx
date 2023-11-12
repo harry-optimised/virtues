@@ -17,3 +17,4 @@ it('renders the letter T when day is t', () => {
   const { getByText } = render(<DayCell day="t" highlighted={false} />);
   expect(getByText('T')).toBeDefined();
 });
+

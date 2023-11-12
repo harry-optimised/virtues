@@ -23,8 +23,8 @@ import { Frame } from '../../api/types';
 import DayCell from '../DayCell';
 import LogCell from '../LogCell';
 import VirtueCell from '../VirtueCell';
+import TableHeader from './TableHeader';
 
-const HEADER = ['', 'M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
 interface GridProps {
   frame: Frame;
@@ -148,25 +148,7 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
       </View>
 
       <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          {HEADER.map((day, dayIndex) =>
-            dayIndex > 0 ? (
-              <DayCell
-                key={dayIndex}
-                day={day}
-                highlighted={dayIndex === currentDayIndex}
-              />
-            ) : (
-              <VirtueCell
-                key={dayIndex}
-                virtue={''}
-                highlighted={false}
-                selected={false}
-              />
-            )
-          )}
-        </View>
-
+        <TableHeader />
         {data.map((row, virtueIndex) => (
           <View
             key={virtueIndex}
@@ -185,7 +167,7 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
                       selectedVirtueIndex === virtueIndex
                     }
                     highlighted={
-                      dayIndex === currentDayIndex ||
+                      dayIndex % 7 === currentDayIndex ||
                       virtueIndex === currentVirtueIndex
                     }
                   />
