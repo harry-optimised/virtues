@@ -24,7 +24,6 @@ import LogCell from '../LogCell';
 import VirtueCell from '../VirtueCell';
 import TableHeader from './TableHeader';
 
-
 interface GridProps {
   frame: Frame;
   moveIndex(direction: string): void;
@@ -203,7 +202,7 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
         <IconButton
           icon="broom"
           size={32}
-          style={{ opacity: 0.8 }}
+          style={{ borderRadius: 8 }}
           containerColor="#6F5E53"
           iconColor="white"
           onPress={() => onLog('clear')}
@@ -211,7 +210,7 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
         <IconButton
           icon="minus"
           size={32}
-          style={{ opacity: 0.8 }}
+          style={{ borderRadius: 8 }}
           containerColor="#6F5E53"
           iconColor="white"
           onPress={() => onLog('minus')}
@@ -219,7 +218,7 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
         <IconButton
           icon="plus"
           size={32}
-          style={{ opacity: 0.8 }}
+          style={{ borderRadius: 8 }}
           containerColor="#6F5E53"
           iconColor="white"
           onPress={() => onLog('plus')}

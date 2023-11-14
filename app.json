@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Virtues",
+    "name": "My Virtue",
     "slug": "virtues",
     "version": "0.1.0",
     "orientation": "portrait",
@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.turner.virtues"

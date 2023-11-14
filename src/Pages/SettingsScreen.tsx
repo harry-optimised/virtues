@@ -118,17 +118,20 @@ const SettingsScreen: React.FC = () => {
     reset();
   }, [newName]);
 
-  const setStartDate = useCallback((event, selectedDate) => {
-    const current = frames.findIndex((frame) => frame.id === expanded);
-    setNewStartDate(selectedDate);
-    dispatch(
-      updateFrame({
-        ...frames[current],
-        date: selectedDate.toISOString()
-      })
-    );
-    reset();
-  }, [frames, expanded]);
+  const setStartDate = useCallback(
+    (event, selectedDate) => {
+      const current = frames.findIndex((frame) => frame.id === expanded);
+      setNewStartDate(selectedDate);
+      dispatch(
+        updateFrame({
+          ...frames[current],
+          date: selectedDate.toISOString()
+        })
+      );
+      reset();
+    },
+    [frames, expanded]
+  );
 
   const onToggleSwitch = useCallback(() => {
     setIsSwitchOn((prev) => !prev);
@@ -160,7 +163,7 @@ const SettingsScreen: React.FC = () => {
     >
       <Headline>Change Start Date</Headline>
       <DateTimePicker
-        display='inline'
+        display="inline"
         style={{ marginTop: 16, marginHorizontal: 0, paddingHorizontal: 0 }}
         testID="dateTimePicker"
         value={newStartDate}
@@ -168,16 +171,16 @@ const SettingsScreen: React.FC = () => {
         onChange={setStartDate}
       />
     </Modal>
-  )
+  );
 
   const androidDatePicker = (
     <DateTimePicker
-            testID="dateTimePicker"
-            value={newStartDate}
-            mode="date"
-            onChange={setStartDate}
-          />
-  )
+      testID="dateTimePicker"
+      value={newStartDate}
+      mode="date"
+      onChange={setStartDate}
+    />
+  );
 
   return (
     <>
@@ -209,9 +212,8 @@ const SettingsScreen: React.FC = () => {
             Rename
           </Button>
         </Modal>
-        {newStartDateVisible && (
-          Platform.OS === 'ios' ? iOSDatePicker : androidDatePicker          
-        )}
+        {newStartDateVisible &&
+          (Platform.OS === 'ios' ? iOSDatePicker : androidDatePicker)}
         <Modal
           visible={duplicateVisible}
           onDismiss={() => setDuplicateVisible(false)}
@@ -320,8 +322,23 @@ const SettingsScreen: React.FC = () => {
               disabled={true}
             />
           </Text>
-          <Text variant="labelLarge" style={{ marginLeft: 8 }}>
+          <Text variant="labelLarge" style={{ marginLeft: 8, opacity: 0.5 }}>
             Enable syncing of data to remote server
+          </Text>
+        </View>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingLeft: 8,
+            paddingRight: 16,
+            marginBottom: 16
+          }}
+        >
+          <Text variant="labelSmall" style={{ marginLeft: 8, opacity: 0.5 }}>
+            Syncing to remote server is a feature soon to be released. For now,
+            all data is stored locally on your device.
           </Text>
         </View>
 
