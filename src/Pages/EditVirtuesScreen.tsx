@@ -184,7 +184,10 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
             <Text variant="titleLarge" style={styles.text}>
               {capitalize(item.name)}
             </Text>
-            <Text variant="titleSmall" style={styles.text}>
+            <Text
+              variant="titleSmall"
+              style={{ color: '#6F5E53', marginTop: 8 }}
+            >
               {item.virtue.tagLine}
             </Text>
           </View>
@@ -202,6 +205,7 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
           style={{ bottom: '50%' }}
           contentContainerStyle={{
             backgroundColor: 'white',
+            borderRadius: 8,
             padding: 20,
             margin: 16
           }}
@@ -222,14 +226,23 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
             onChangeText={(text) => setNewVirtueTagline2(text)}
             style={{ marginVertical: 16 }}
           />
-          <Button
-            onPress={() => {
-              onNewVirtue();
-              setNewVirtueVisible(false);
+
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-end'
             }}
           >
-            Add
-          </Button>
+            <Button
+              onPress={() => {
+                onNewVirtue();
+                setNewVirtueVisible(false);
+              }}
+            >
+              Add
+            </Button>
+          </View>
         </Modal>
         <Modal
           visible={visible}
@@ -237,10 +250,12 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
             hideModal();
             setConfirmSure(false);
           }}
-          style={{ bottom: '50%' }}
+          style={{ bottom: '40%' }}
           contentContainerStyle={{
             backgroundColor: 'white',
-            padding: 20,
+            borderRadius: 8,
+            padding: 16,
+            paddingHorizontal: 20,
             margin: 16
           }}
         >
@@ -249,15 +264,23 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
               <Headline>Delete {capitalize(modalVirtue)}?</Headline>
               <Text>Are you sure you want to delete this virtue?</Text>
 
-              <Button
-                onPress={() => {
-                  hideModal();
-                  setConfirmSure(false);
-                  onDeleteVirtue(modalVirtue || '');
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end'
                 }}
               >
-                Delete
-              </Button>
+                <Button
+                  onPress={() => {
+                    hideModal();
+                    setConfirmSure(false);
+                    onDeleteVirtue(modalVirtue || '');
+                  }}
+                >
+                  Delete
+                </Button>
+              </View>
             </>
           )}
           {!confirmSure && (
@@ -315,7 +338,6 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
       />
       <View
         style={{
-          opacity: 0.8,
           bottom: 16,
           right: 16,
           position: 'absolute'
@@ -324,7 +346,7 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
         <IconButton
           icon="plus"
           mode="contained"
-          style={{ backgroundColor: '#6F5E53' }}
+          style={{ backgroundColor: '#6F5E53', borderRadius: 8 }}
           iconColor="white"
           size={32}
           onPress={() => setNewVirtueVisible(true)}

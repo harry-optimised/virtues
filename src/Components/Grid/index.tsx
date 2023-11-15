@@ -92,7 +92,7 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
                 if (action === 'clear') {
                   return 0;
                 } else if (action === 'plus') {
-                  return value <= 6 ? value + 1 : value;
+                  return value < 8 ? value + 1 : value;
                 } else if (action === 'minus') {
                   return value > 0 ? value - 1 : value;
                 }
@@ -175,7 +175,7 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
                 >
                   <VirtueCell
                     key={dayIndex}
-                    virtue={content}
+                    virtue={content as string}
                     selected={
                       selectedDayIndex === dayIndex &&
                       selectedVirtueIndex === virtueIndex

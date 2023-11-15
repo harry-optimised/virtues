@@ -305,7 +305,7 @@ const SettingsScreen: React.FC = () => {
         </Modal>
       </Portal>
       <ScrollView style={{ height: '100%' }}>
-        <View
+        {/* <View
           style={{
             display: 'flex',
             flexDirection: 'row',
@@ -340,7 +340,7 @@ const SettingsScreen: React.FC = () => {
             Syncing to remote server is a feature soon to be released. For now,
             all data is stored locally on your device.
           </Text>
-        </View>
+        </View> */}
 
         {/* <View style={{ padding: 8 }}>
           <Text>
@@ -387,9 +387,8 @@ const SettingsScreen: React.FC = () => {
             </View>
           </RadioButton.Group>
         </View> */}
-        <Divider />
 
-        <List.Section title="Manage Courses">
+        <List.Section>
           {frames.map((frame) => (
             <List.Accordion
               key={frame.id}

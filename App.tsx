@@ -78,7 +78,7 @@ function BottomTabs(): JSX.Element {
       />
 
       <Tab.Screen
-        name="Instructions"
+        name="Guide"
         component={HelpScreen}
         options={() => ({
           tabBarIcon: ({ color, size }) => (
@@ -91,12 +91,17 @@ function BottomTabs(): JSX.Element {
         })}
       />
       <Tab.Screen
-        name="Settings"
+        name="Manage"
         component={SettingsScreen}
         options={() => ({
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="cog" color={color} size={size} />
-          )
+            <MaterialCommunityIcons
+              name="folder-edit"
+              color={color}
+              size={size}
+            />
+          ),
+          headerTitle: 'Manage Virtues'
         })}
       />
     </Tab.Navigator>
@@ -154,7 +159,7 @@ export const theme = {
     primary: '#6F5E53',
     secondary: '#F1E9E4',
     background: '#FFFFFF'
-  },
+  }
 };
 
 function App(): JSX.Element {
