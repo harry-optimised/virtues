@@ -114,6 +114,7 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
   const onChangeVirtue = useCallback(
     (oldVirtueName: string) => {
       if (!frame) return;
+      if (newVirtueName === '') return;
       const virtue = frame.data[oldVirtueName];
       const updatedData = {
         ...frame.data,
@@ -137,6 +138,10 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
   const onNewVirtue = useCallback(() => {
     if (!frame) return;
     if (newVirtueName2 === '') return;
+
+    // Check name not already used.
+    if (frame.data[newVirtueName2]) return;
+
     const updatedData = {
       ...frame.data,
       [newVirtueName2]: {
@@ -149,6 +154,8 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
     dispatch(updateFrame({ ...frame, data: updatedData })).then(() =>
       dispatch(fetchFrames())
     );
+    setNewVirtueName2('');
+    setNewVirtueTagline2('');
   }, [frame, newVirtueName2, newVirtueTagline2]);
 
   const onDeleteVirtue = useCallback(
@@ -215,7 +222,9 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
             label="Name"
             mode="outlined"
             defaultValue={newVirtueName2}
-            onChangeText={(text) => setNewVirtueName2(text)}
+            onChangeText={(text) =>
+              setNewVirtueName2(text.length < 12 ? text : text.slice(0, 12))
+            }
             style={{ marginVertical: 16 }}
           />
           <TextInput
@@ -287,19 +296,26 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
             <>
               <Headline>Update Virtue</Headline>
               <TextInput
-                label="Name"
+                label="Name - maximum 12 characters"
                 mode="outlined"
                 defaultValue={newVirtueName}
-                onChangeText={(text) => setNewVirtueName(text)}
+                onChangeText={(text) =>
+                  setNewVirtueName(text.length < 12 ? text : text.slice(0, 12))
+                }
                 style={{ marginVertical: 16 }}
               />
               <TextInput
-                label="Tagline"
+                label="Tagline - maximum 5 lines"
                 mode="outlined"
                 multiline={true}
+                numberOfLines={5}
                 defaultValue={newVirtueTagline}
-                onChangeText={(text) => setNewVirtueTagline(text)}
-                style={{ marginVertical: 16 }}
+                onChangeText={(text) => {
+                  return setNewVirtueTagline(
+                    text.split('\n').slice(0, 5).join('\n')
+                  );
+                }}
+                style={{ marginVertical: 16, maxHeight: 150 }}
               />
               <View
                 style={{
@@ -329,13 +345,35 @@ const EditVirtuesScreen: React.FC = ({ route }) => {
           )}
         </Modal>
       </Portal>
-      <DraggableFlatList
-        data={data}
-        style={{ width: '100%' }}
-        onDragEnd={onDragEnd}
-        keyExtractor={(item) => item.key}
-        renderItem={renderItem}
-      />
+      {data.length > 0 && (
+        <DraggableFlatList
+          data={data}
+          style={{ width: '100%' }}
+          onDragEnd={onDragEnd}
+          keyExtractor={(item) => item.key}
+          renderItem={renderItem}
+        />
+      )}
+      {data.length === 0 && (
+        <View
+          style={{
+            width: '100%',
+            height: '100%',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Text variant="titleLarge" style={{ color: '#6F5E53' }}>
+            No Virtues
+          </Text>
+          <Text
+            variant="bodyMedium"
+            style={{ marginTop: 16, color: '#6F5E53' }}
+          >
+            Add a virtue to get started.
+          </Text>
+        </View>
+      )}
       <View
         style={{
           bottom: 16,

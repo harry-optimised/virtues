@@ -6,6 +6,8 @@ import {
 } from '@reduxjs/toolkit';
 import { Frame } from '../api/types';
 import { RootState } from './store';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 import { listFrames, putFrame, postFrame, destroyFrame } from '../api';
 
 const DEFAULT_FRAME: Omit<Frame, 'id'> = {
@@ -100,32 +102,6 @@ export const fetchFrames = createAsyncThunk('frames/fetch', async () => {
   return response.results;
 });
 
-export const duplicateFrame = createAsyncThunk(
-  'frame/duplicateFrame',
-  async ({ id }: { id: string }, { getState }) => {
-    const state = getState() as RootState;
-    const existingFrame = state.appointments.entities[id];
-
-    if (existingFrame) {
-      const newFrame = {
-        ...existingFrame,
-        name: `${existingFrame.name} (copy)`,
-        date: new Date().toISOString()
-      };
-
-      for (const key in newFrame.data) {
-        if (Object.prototype.hasOwnProperty.call(newFrame.data, key)) {
-          newFrame.data[key].log = [0, 0, 0, 0, 0, 0, 0];
-        }
-      }
-
-      await postFrame(newFrame);
-      return newFrame;
-    }
-    throw new Error('Frame not found');
-  }
-);
-
 export const createFrame = createAsyncThunk(
   'frame/createFrame',
   async ({ name, seed }: { name: string; seed: boolean }, {}) => {
@@ -141,7 +117,7 @@ export const createFrame = createAsyncThunk(
           data: {}
         };
 
-    const frame = await postFrame(newFrame);
+    const frame = await postFrame({ ...newFrame, id: uuidv4() });
     return frame;
   }
 );
@@ -183,15 +159,33 @@ export const framesSlice = createSlice({
   name: 'frames',
   initialState: framesAdapter.getInitialState(),
   reducers: {
-    deleteFrame: framesAdapter.removeOne
+    deleteFrame: framesAdapter.removeOne,
+    duplicateFrame: (state, action: PayloadAction<string>) => {
+      const existingFrame = state.entities[action.payload];
+
+      if (existingFrame) {
+        const newFrame = {
+          ...existingFrame,
+          name: `${existingFrame.name.slice(0, 13)} (copy)`,
+          date: new Date().toISOString(),
+          id: uuidv4()
+        };
+
+        for (const key in newFrame.data) {
+          if (Object.prototype.hasOwnProperty.call(newFrame.data, key)) {
+            newFrame.data[key].log = [0, 0, 0, 0, 0, 0, 0];
+          }
+        }
+
+        framesAdapter.addOne(state, newFrame);
+        postFrame(newFrame);
+      }
+    }
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchFrames.fulfilled, (state, action) => {
         framesAdapter.setAll(state, action.payload);
-      })
-      .addCase(duplicateFrame.fulfilled, (state, action) => {
-        framesAdapter.addOne(state, action.payload);
       })
       .addCase(createFrame.fulfilled, (state, action) => {
         framesAdapter.addOne(state, action.payload);
@@ -209,6 +203,8 @@ export default framesSlice.reducer;
 
 export const { selectAll: selectAllFrames, selectById } =
   framesAdapter.getSelectors((state: RootState) => state.appointments);
+
+export const { duplicateFrame } = framesSlice.actions;
 
 export const deleteFrame = createAsyncThunk(
   'frame/deleteFrame',

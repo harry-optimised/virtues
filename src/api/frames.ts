@@ -128,9 +128,7 @@ export const putFrame = async (frame: Frame): Promise<Frame> => {
   return frame;
 };
 
-export const postFrame = async (
-  newFrame: Omit<Frame, 'id'>
-): Promise<Frame> => {
+export const postFrame = async (newFrame: Frame): Promise<Frame> => {
   const rawFrames = await AsyncStorage.getItem('frames');
   let frames: Frame[] = [];
 
@@ -140,8 +138,7 @@ export const postFrame = async (
 
   // Assuming 'id' is a string. Generate a new ID for the frame.
   const frameWithId: Frame = {
-    ...newFrame,
-    id: Math.random().toString(36).substr(2, 9)
+    ...newFrame
   };
 
   frames.push(frameWithId); // Add the new frame with an ID to the array

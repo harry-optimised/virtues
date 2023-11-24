@@ -92,7 +92,7 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
                 if (action === 'clear') {
                   return 0;
                 } else if (action === 'plus') {
-                  return value < 8 ? value + 1 : value;
+                  return value < 9 ? value + 1 : value;
                 } else if (action === 'minus') {
                   return value > 0 ? value - 1 : value;
                 }
@@ -138,6 +138,7 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
         <IconButton
           icon="chevron-right"
           size={32}
+          style={{ padding: 0 }}
           iconColor="#6F5E53"
           onPress={() => moveIndex('right')}
         />
@@ -191,7 +192,7 @@ function Grid({ frame, moveIndex, setBanner }: GridProps): ReactElement {
 
       <View
         style={{
-          bottom: 8,
+          bottom: 32,
           right: 8,
           display: 'flex',
           flexDirection: 'row',

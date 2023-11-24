@@ -14,7 +14,8 @@ const styles = StyleSheet.create({
     alignContent: 'center'
   },
   centerText: {
-    textAlign: 'center'
+    textAlign: 'center',
+    color: '#6F5E53'
   },
   elementContainer: {
     height: 48,
@@ -57,9 +58,9 @@ const LogCell: React.FC<VirtueElementProps> = ({
   const width = Dimensions.get('window').width;
   let renderedValue = null;
 
-  if (value > 0 && value <= 6) {
+  if (value > 0 && value <= 9) {
     renderedValue = <Dots value={value} border={selected} />;
-  } else if (value > 6) {
+  } else if (value > 9) {
     renderedValue = <Text style={styles.centerText}>{value}</Text>;
   }
 

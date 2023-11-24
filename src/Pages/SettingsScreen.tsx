@@ -107,7 +107,12 @@ const SettingsScreen: React.FC = () => {
   }, [frames, expanded]);
 
   const handleChangeName = useCallback(() => {
+    if (newName === '') return;
     const current = frames.findIndex((frame) => frame.id === expanded);
+
+    // Check if course name already exists
+    const allCourseNames = frames.map((frame) => frame.name);
+    if (allCourseNames.includes(newCourseName)) return;
 
     dispatch(
       updateFrame({
@@ -116,7 +121,7 @@ const SettingsScreen: React.FC = () => {
       })
     );
     reset();
-  }, [newName]);
+  }, [newName, frames]);
 
   const setStartDate = useCallback(
     (event, selectedDate) => {
@@ -139,13 +144,18 @@ const SettingsScreen: React.FC = () => {
 
   const onAddCourse = useCallback(() => {
     if (!newCourseName) return;
+
+    // Check if course name already exists
+    const allCourseNames = frames.map((frame) => frame.name);
+    if (allCourseNames.includes(newCourseName)) return;
+
     dispatch(createFrame({ name: newCourseName, seed: newCourseSeed }));
     reset();
-  }, [newCourseName, newCourseSeed]);
+  }, [newCourseName, newCourseSeed, frames]);
 
   const onCopyCourse = useCallback(() => {
     const current = frames.findIndex((frame) => frame.id === expanded);
-    dispatch(duplicateFrame({ id: frames[current].id }));
+    dispatch(duplicateFrame(frames[current].id));
     reset();
   }, [frames, expanded]);
 
@@ -196,21 +206,33 @@ const SettingsScreen: React.FC = () => {
           }}
         >
           <Headline>Change Name</Headline>
+          <Text>Maximum 20 characters</Text>
           <TextInput
             label="Name"
             mode="outlined"
             defaultValue={newName}
-            onChangeText={(text) => setnewName(text)}
+            onChangeText={(text) =>
+              setnewName(text.length <= 20 ? text : text.slice(0, 20))
+            }
             style={{ marginVertical: 16 }}
           />
-          <Button
-            onPress={() => {
-              setNewNameVisible(false);
-              handleChangeName();
+          <View
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-end'
             }}
           >
-            Rename
-          </Button>
+            <Button
+              onPress={() => {
+                setNewNameVisible(false);
+                handleChangeName();
+              }}
+            >
+              Rename
+            </Button>
+          </View>
         </Modal>
         {newStartDateVisible &&
           (Platform.OS === 'ios' ? iOSDatePicker : androidDatePicker)}
@@ -228,14 +250,23 @@ const SettingsScreen: React.FC = () => {
           <Text style={{ marginVertical: 16 }}>
             Are you sure you want to duplicate this course?
           </Text>
-          <Button
-            onPress={() => {
-              setDuplicateVisible(false);
-              onCopyCourse();
+          <View
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-end'
             }}
           >
-            Duplicate
-          </Button>
+            <Button
+              onPress={() => {
+                setDuplicateVisible(false);
+                onCopyCourse();
+              }}
+            >
+              Duplicate
+            </Button>
+          </View>
         </Modal>
         <Modal
           visible={deleteVisible}
@@ -252,14 +283,23 @@ const SettingsScreen: React.FC = () => {
             Are you sure you want to delete this course? This action cannot be
             undone.
           </Text>
-          <Button
-            onPress={() => {
-              setDeleteVisible(false);
-              handleDelete();
+          <View
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-end'
             }}
           >
-            Delete
-          </Button>
+            <Button
+              onPress={() => {
+                setDeleteVisible(false);
+                handleDelete();
+              }}
+            >
+              Delete
+            </Button>
+          </View>
         </Modal>
         <Modal
           visible={newCourseVisible}
@@ -272,11 +312,14 @@ const SettingsScreen: React.FC = () => {
           }}
         >
           <Headline>Add a New Course</Headline>
+          <Text>Maximum 20 characters</Text>
           <TextInput
             label="Name"
             mode="outlined"
             defaultValue={newCourseName}
-            onChangeText={(text) => setNewCourseName(text)}
+            onChangeText={(text) =>
+              setNewCourseName(text.length <= 20 ? text : text.slice(0, 20))
+            }
             style={{ marginVertical: 16 }}
           />
           <View
@@ -294,14 +337,23 @@ const SettingsScreen: React.FC = () => {
             />
             <Text>Fill with Franklin's original virtues</Text>
           </View>
-          <Button
-            onPress={() => {
-              setNewCourseVisible(false);
-              onAddCourse();
+          <View
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-end'
             }}
           >
-            Add
-          </Button>
+            <Button
+              onPress={() => {
+                setNewCourseVisible(false);
+                onAddCourse();
+              }}
+            >
+              Add
+            </Button>
+          </View>
         </Modal>
       </Portal>
       <ScrollView style={{ height: '100%' }}>
@@ -399,14 +451,24 @@ const SettingsScreen: React.FC = () => {
               onPress={() => handlePress(frame.id)}
             >
               <View style={{ paddingLeft: 0, marginLeft: 16 }}>
-                <TouchableOpacity onPress={() => setNewNameVisible(true)}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setnewName(frame.name);
+                    setNewNameVisible(true);
+                  }}
+                >
                   <List.Item
                     title="Change name"
                     description={frame.name}
                     left={(props) => <List.Icon {...props} icon="pencil" />}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setNewStartDateVisible(true)}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setNewStartDate(new Date(frame.date));
+                    setNewStartDateVisible(true);
+                  }}
+                >
                   <List.Item
                     title="Set start date"
                     description={new Date(frame.date).toDateString()}
